@@ -1,72 +1,52 @@
 <template>
-  <div class="container">
-    <h1>Cine Estelar</h1>
-    
-    <!-- Carrusel de imágenes -->
-    <div class="swiper-container">
-      <swiper :options="swiperOptions">
-        <swiper-slide v-for="imagen in imagenesCarrusel" :key="imagen">
-          <img :src="imagen" alt="Imagen de película">
-        </swiper-slide>
-        <div class="swiper-pagination"></div>
-      </swiper>
-    </div>
-    
-    <!-- Películas de esta semana -->
+  <div class="container" style="margin-top: 53px;">     
+    <!-- Película de esta semana -->
     <section>
       <h2>Película de esta Semana</h2>
-      <div v-for="pelicula in peliculasDestacadas" :key="pelicula.id">
-        <h3>{{ pelicula.titulo }}</h3>
-        <p>{{ pelicula.descripcion }}</p>
+      <div class="movie-of-the-week">
+        <img :src="peliculasDestacadas[0].poster" :alt="peliculasDestacadas[0].titulo" class="movie-poster">
+        <div class="movie-details">
+          <h3>{{ peliculasDestacadas[0].titulo }}</h3>
+          <p><strong>Duración:</strong> {{ peliculasDestacadas[0].duracion }}</p>
+          <p><strong>Sinopsis:</strong> {{ peliculasDestacadas[0].sinopsis }}</p>
+          <button class="buy-ticket-button">Comprar Entradas</button>
+        </div>
       </div>
     </section>
     
     <!-- Próximamente -->
     <section>
       <h2>Próximamente</h2>
-      <!-- Contenido similar al anterior con las películas próximas -->
+      <div class="upcoming-movies">
+        <div class="movie" v-for="pelicula in peliculasProximas" :key="pelicula.id">
+          <img :src="pelicula.poster" :alt="pelicula.titulo" class="movie-poster">
+          <h3>{{ pelicula.titulo }}</h3>
+        </div>
+      </div>
     </section>
   </div>
 </template>
 
 <script>
-// Importa Swiper y Swiper styles
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import SwiperCore, { Pagination, Navigation } from 'swiper/core';
-import 'swiper/swiper-bundle.css';
-
-// Instala los módulos de Swiper
-SwiperCore.use([Pagination, Navigation]);
-
 export default {
-  components: {
-    Swiper,
-    SwiperSlide
-  },
   data() {
     return {
-      swiperOptions: {
-        loop: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        // Añade más opciones según necesites
-      },
-      imagenesCarrusel: [
-        '/path/to/image-1.jpg',
-        '/path/to/image-2.jpg',
-        // Más imágenes aquí
-      ],
       peliculasDestacadas: [
-        { id: 1, titulo: "Pelicula A", descripcion: "Descripción de Pelicula A" },
+        { 
+          id: 1, 
+          titulo: "King Kong", 
+          descripcion: "Descripción de Pelicula A", 
+          poster: "./Kingkong.jpg", 
+          duracion: "120 min", 
+          sinopsis: "Durante la Gran Depresión, Ann Darrow (Naomi Watts), una actriz de vodevil, se queda sin trabajo. Su suerte parece cambiar cuando conoce a Carl Denham (Jack Black), un empresario que lucha para abrirse camino en el mundo del espectáculo. A ellos se une Jack Driscoll (Adrien Brody), un autor de teatro. Los tres emprenden un viaje a una remota isla, donde Denham tiene previsto dirigir una película. En una frondosa selva, descubren a King Kong, un gorila gigantesco, y a una tribu de seres prehistóricos que han vivido ocultos durante millones de años. Movido por su insaciable ambición, Denham, planea la captura del gorila con el propósito de exhibirlo en Nueva York. " 
+        },
         // Solo una película si se emite una a la vez
       ],
-      // Añadir otro array para próximamente si es necesario
+      peliculasProximas: [
+        { id: 2, titulo: "Pelicula B", poster: "url_de_la_imagen" },
+        { id: 3, titulo: "Pelicula C", poster: "url_de_la_imagen" },
+        { id: 4, titulo: "Pelicula D", poster: "url_de_la_imagen" },
+      ],
     };
   },
 };
@@ -82,22 +62,59 @@ h1, h2, h3, p {
   color: #fff;
 }
 
-.swiper-container {
-  width: 100%;
-  height: 400px;
-}
-
-.swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 section {
   margin-top: 20px;
 }
 
 h2 {
   margin-bottom: 15px;
+}
+
+.movie-of-the-week {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.movie-of-the-week .movie-poster {
+  width: 200px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.movie-details {
+  flex: 1;
+}
+
+.upcoming-movies {
+  display: flex;
+  justify-content: space-between;
+}
+
+.movie {
+  width: calc(33% - 10px); /* 33% del ancho del contenedor, menos el espacio entre las películas */
+}
+
+.movie h3 {
+  margin-top: 10px;
+}
+
+.movie-poster {
+  width: 100%;
+  height: auto;
+}
+
+.buy-ticket-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buy-ticket-button:hover {
+  background-color: #0056b3;
 }
 </style>
