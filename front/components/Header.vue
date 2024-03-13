@@ -5,10 +5,12 @@
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <nav>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact</a></li>
+       
+        <li><NuxtLink to="/">Inicio</NuxtLink></li>
+        <li><NuxtLink to="/sesioActual">Sesio Actual</NuxtLink></li>
+        <li><NuxtLink to="/proximamente">Proximament</NuxtLink></li>
+        <li><NuxtLink to="/Contactanos">Contactanos</NuxtLink></li>
+       
       </ul>
     </nav>
     <label for="nav-toggle" class="nav-toggle-label">

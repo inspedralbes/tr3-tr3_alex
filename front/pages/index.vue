@@ -9,7 +9,7 @@
           <h3>{{ peliculasDestacadas[0].titulo }}</h3>
           <p><strong>Duración:</strong> {{ peliculasDestacadas[0].duracion }}</p>
           <p><strong>Sinopsis:</strong> {{ peliculasDestacadas[0].sinopsis }}</p>
-          <button class="buy-ticket-button">Comprar Entradas</button>
+          <button class="buy-ticket-button" @click="goToCinemaRoom">Comprar Entradas</button>
         </div>
       </div>
     </section>
@@ -29,6 +29,11 @@
 
 <script>
 export default {
+  methods: {
+    goToCinemaRoom() {
+      this.$router.push('/salaCine');
+    },
+  },
   data() {
     return {
       peliculasDestacadas: [
