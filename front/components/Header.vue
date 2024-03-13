@@ -1,7 +1,7 @@
 <template>
+  <body>
   <header>
-    <img src="/cine.png" width="80">
-    <h1 class="logo">Cine Alex</h1>
+      <h1 class="logo">Cine Alex</h1>
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <nav>
       <ul>
@@ -14,10 +14,12 @@
       </ul>
     </nav>
     <label for="nav-toggle" class="nav-toggle-label">
+        
       <span></span>
     </label>
   </header>
   <br>
+  </body>
 </template>
 
 <script>
@@ -63,7 +65,9 @@ header {
   left: -9999px;
 }
 
-
+body {
+  margin : 0;
+}
 .nav-toggle:focus~.nav-toggle-label {
   outline: 3px solid rgba(lightblue, .75);
 }
@@ -147,6 +151,7 @@ nav a:hover {
   opacity: 1;
   transition: opacity 250ms ease-in-out 250ms;
 }
+
 
 @media screen and (min-width: 800px) {
   .nav-toggle-label {

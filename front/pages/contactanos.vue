@@ -1,8 +1,10 @@
 <template>
-    <div style="margin-top: 53px;">
+  <body>
+    <div style="margin-top: 62px;">
       <h1>Acerca de Nosotros</h1>
       <p>Esta es una página básica en Nuxt para mostrar información sobre nosotros.</p>
     </div>
+    </body>
   </template>
   
   <script>

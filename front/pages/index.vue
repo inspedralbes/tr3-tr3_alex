@@ -1,5 +1,6 @@
 <template>
-  <div class="container" style="margin-top: 53px;">     
+  <body>
+  <div class="container" style="margin-top: 62px;">     
     <!-- Película de esta semana -->
     <section>
       <h2>Película de esta Semana</h2>
@@ -25,6 +26,7 @@
       </div>
     </section>
   </div>
+  </body>
 </template>
 
 <script>
@@ -109,6 +111,10 @@ h2 {
   height: auto;
 }
 
+body{
+  margin: 0%;
+}
+
 .buy-ticket-button {
   margin-top: 20px;
   padding: 10px 20px;
@@ -122,4 +128,13 @@ h2 {
 .buy-ticket-button:hover {
   background-color: #0056b3;
 }
+
+@media screen and (max-width: 768px) {
+  /* Estilos específicos para pantallas con un ancho máximo de 768px (tamaño móvil) */
+  .container {
+    margin-top: 200px; /* Cam bia el margen superior para la versión móvil */
+  }
+}
+
+
 </style>

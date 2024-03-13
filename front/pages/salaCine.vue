@@ -1,5 +1,5 @@
 <template>
-  <div class="cinema-container" style="margin-top: 53px;">
+  <div class="cinema-container" style="margin-top: 62px;">
     <div class="row" v-for="row in 10" :key="row">
       <div
         class="seat"
