@@ -47,19 +47,25 @@ export default {
   background-color: black;
   padding: 20px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Asegura que las filas se apilen verticalmente */
 }
+
 .row {
   display: flex;
+  justify-content: center; /* Centra los asientos en su fila */
 }
+
 .seat {
   width: 30px;
   height: 30px;
   margin: 5px;
-  background-color: grey;
   cursor: pointer;
+  background-color: grey; /* Considera quitar esto si el SVG cubre el asiento completamente */
+  background-image: url('path_to_your_seat_icon.svg'); /* Añade tu imagen SVG aquí */
+  background-size: cover; /* Asegura que el SVG cubra el asiento */
 }
+
 .seat.selected, .seat:hover {
-  background-color: green;
+  background-color: green; /* Ajusta según necesites */
 }
 </style>
