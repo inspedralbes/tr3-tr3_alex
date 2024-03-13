@@ -37,7 +37,7 @@ export default {
           titulo: "King Kong", 
           descripcion: "Descripción de Pelicula A", 
           poster: "./Kingkong.jpg", 
-          duracion: "120 min", 
+          duracion: "187 min", 
           sinopsis: "Durante la Gran Depresión, Ann Darrow (Naomi Watts), una actriz de vodevil, se queda sin trabajo. Su suerte parece cambiar cuando conoce a Carl Denham (Jack Black), un empresario que lucha para abrirse camino en el mundo del espectáculo. A ellos se une Jack Driscoll (Adrien Brody), un autor de teatro. Los tres emprenden un viaje a una remota isla, donde Denham tiene previsto dirigir una película. En una frondosa selva, descubren a King Kong, un gorila gigantesco, y a una tribu de seres prehistóricos que han vivido ocultos durante millones de años. Movido por su insaciable ambición, Denham, planea la captura del gorila con el propósito de exhibirlo en Nueva York. " 
         },
         // Solo una película si se emite una a la vez
