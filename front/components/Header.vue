@@ -1,32 +1,66 @@
 <template>
+
   <body>
-  <header>
+    <header :class="{ 'header-visible': showHeader }">
       <h1 class="logo">Cine Alex</h1>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <nav>
-      <ul>
-       
-        <li><NuxtLink to="/">Inicio</NuxtLink></li>
-        <li><NuxtLink to="/sesioActual">Sesio Actual</NuxtLink></li>
-        <li><NuxtLink to="/proximamente">Proximament</NuxtLink></li>
-        <li><NuxtLink to="/Contactanos">Contactanos</NuxtLink></li>
-       
-      </ul>
-    </nav>
-    <label for="nav-toggle" class="nav-toggle-label">
-        
-      <span></span>
-    </label>
-  </header>
-  <br>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <nav>
+        <ul>
+          <li>
+            <NuxtLink to="/">Inicio</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/sesioActual">Sesio Actual</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/proximamente">Proximament</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/Contactanos">Contactanos</NuxtLink>
+          </li>
+        </ul>
+      </nav>
+      <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+      </label>
+    </header>
+    <br>
   </body>
 </template>
 
 <script>
 export default {
   name: 'Header',
+  data() {
+    return {
+      showHeader: true,
+      lastScrollTop: 0
+    };
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    handleScroll() {
+      const scrollTop = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
+      
+      if (scrollTop > this.lastScrollTop) {
+        // Si el usuario se desplaza hacia abajo, ocultamos el header
+        this.showHeader = false;
+      } else {
+        // Si el usuario se desplaza hacia arriba, mostramos el header
+        this.showHeader = true;
+      }
+      
+      this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }
+  }
 }
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,600');
 
@@ -38,6 +72,26 @@ export default {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+
+.header-visible {
+  background: rgba(0, 214, 170, .85);
+  text-align: center;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  top: 0;
+  transition: top 0.3s;
+  /* Animación de transición */
+}
+
+/* Estilo para el header cuando está oculto */
+.header-hidden {
+  top: -100px;
+  /* Posición fuera de la vista */
+  transition: top 0.3s;
+  /* Animación de transición */
 }
 
 body {
@@ -52,11 +106,13 @@ header {
   position: fixed;
   z-index: 999;
   width: 100%;
-  top: 0; /* Asegura que el header comience desde arriba */
+  top: 0;
+  /* Asegura que el header comience desde arriba */
 }
 
 .container {
-  margin-top: 80px; /* Agrega espacio entre el header y el contenido */
+  margin-top: 80px;
+  /* Agrega espacio entre el header y el contenido */
 }
 
 .nav-toggle {
@@ -66,8 +122,9 @@ header {
 }
 
 body {
-  margin : 0;
+  margin: 0;
 }
+
 .nav-toggle:focus~.nav-toggle-label {
   outline: 3px solid rgba(lightblue, .75);
 }

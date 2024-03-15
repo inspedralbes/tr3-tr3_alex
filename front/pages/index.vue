@@ -50,9 +50,9 @@ export default {
         // Solo una película si se emite una a la vez
       ],
       peliculasProximas: [
-        { id: 2, titulo: "Pelicula B", poster: "url_de_la_imagen" },
-        { id: 3, titulo: "Pelicula C", poster: "url_de_la_imagen" },
-        { id: 4, titulo: "Pelicula D", poster: "url_de_la_imagen" },
+        { id: 2, titulo: "Pelicula B", poster: "./Kingkong.jpg" },
+        { id: 3, titulo: "Pelicula C", poster: "./Kingkong.jpg" },
+        { id: 4, titulo: "Pelicula D", poster: "./Kingkong.jpg" },
       ],
     };
   },
