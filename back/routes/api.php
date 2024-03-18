@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PeliculaController;
-use App\
+use App\Http\Controllers\SesionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,7 @@ use App\
 |
 */
 Route::get('/peliculas', [PeliculaController::class,'listarPeliculas']);
+Route::get('/sesiones', [SesionController::class, 'listarSesions']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

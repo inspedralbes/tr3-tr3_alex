@@ -1,7 +1,7 @@
 <template>
 
   <body>
-    <header :class="{ 'header-visible': showHeader }">
+    <header :class="{ 'header-visible': showHeader, 'header-hidden': !showHeader }">
       <h1 class="logo">Cine Alex</h1>
       <input type="checkbox" id="nav-toggle" class="nav-toggle">
       <nav>
@@ -13,7 +13,7 @@
             <NuxtLink to="/sesioActual">Sesio Actual</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/proximamente">Proximament</NuxtLink>
+            <NuxtLink to="/peliculas">Peliculas</NuxtLink>
           </li>
           <li>
             <NuxtLink to="/Contactanos">Contactanos</NuxtLink>
@@ -60,6 +60,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Work+Sans:300,600');

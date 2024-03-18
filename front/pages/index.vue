@@ -1,68 +1,77 @@
 <template>
-  <body>
-  <div class="container" style="margin-top: 62px;">     
+  <div class="container">
+    
     <!-- Película de esta semana -->
     <section>
       <h2>Película de esta Semana</h2>
-      <div class="movie-of-the-week">
-        <img :src="peliculasDestacadas[0].poster" :alt="peliculasDestacadas[0].titulo" class="movie-poster">
+      <div v-if="peliculaDestacada" class="movie-of-the-week">
+        <img :src="peliculaDestacada.poster" :alt="peliculaDestacada.titulo" class="movie-poster-large">
         <div class="movie-details">
-          <h3>{{ peliculasDestacadas[0].titulo }}</h3>
-          <p><strong>Duración:</strong> {{ peliculasDestacadas[0].duracion }}</p>
-          <p><strong>Sinopsis:</strong> {{ peliculasDestacadas[0].sinopsis }}</p>
+          <h3>{{ peliculaDestacada.titulo }}</h3>
+          <p><strong>Duración:</strong> {{ peliculaDestacada.duracion }}</p>
+          <p><strong>Sinopsis:</strong> {{ peliculaDestacada.sinopsis }}</p>
           <button class="buy-ticket-button" @click="goToCinemaRoom">Comprar Entradas</button>
         </div>
       </div>
     </section>
-    
-    <!-- Próximamente -->
-    <section>
+
+  <!-- Próximamente -->
+  <section>
       <h2>Próximamente</h2>
       <div class="upcoming-movies">
-        <div class="movie" v-for="pelicula in peliculasProximas" :key="pelicula.id">
-          <img :src="pelicula.poster" :alt="pelicula.titulo" class="movie-poster">
+        <div v-for="pelicula in peliculasProximas" :key="pelicula.id" class="movie">
+          <img :src="pelicula.poster" :alt="pelicula.titulo" class="movie-poster-small">
           <h3>{{ pelicula.titulo }}</h3>
         </div>
+           <div v-if="peliculasProximas.length < 3" class="movie"></div>
       </div>
     </section>
   </div>
-  </body>
 </template>
 
 <script>
 export default {
   methods: {
+    async fetchPeliculas() {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/peliculas');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        this.peliculas = data.data;
+        // Asignar la película destacada aleatoria
+        this.peliculaDestacada = this.peliculas[Math.floor(Math.random() * this.peliculas.length)];
+        // Filtrar las próximas películas (excluir la película destacada)
+        this.peliculasProximas = this.peliculas.filter(pelicula => pelicula.id !== this.peliculaDestacada.id).slice(0, 3);
+      } catch (error) {
+        console.error("Could not fetch peliculas: ", error);
+      }
+    },
     goToCinemaRoom() {
       this.$router.push('/salaCine');
     },
   },
   data() {
     return {
-      peliculasDestacadas: [
-        { 
-          id: 1, 
-          titulo: "King Kong", 
-          descripcion: "Descripción de Pelicula A", 
-          poster: "./Kingkong.jpg", 
-          duracion: "187 min", 
-          sinopsis: "Durante la Gran Depresión, Ann Darrow (Naomi Watts), una actriz de vodevil, se queda sin trabajo. Su suerte parece cambiar cuando conoce a Carl Denham (Jack Black), un empresario que lucha para abrirse camino en el mundo del espectáculo. A ellos se une Jack Driscoll (Adrien Brody), un autor de teatro. Los tres emprenden un viaje a una remota isla, donde Denham tiene previsto dirigir una película. En una frondosa selva, descubren a King Kong, un gorila gigantesco, y a una tribu de seres prehistóricos que han vivido ocultos durante millones de años. Movido por su insaciable ambición, Denham, planea la captura del gorila con el propósito de exhibirlo en Nueva York. " 
-        },
-        // Solo una película si se emite una a la vez
-      ],
-      peliculasProximas: [
-        { id: 2, titulo: "Pelicula B", poster: "./Kingkong.jpg" },
-        { id: 3, titulo: "Pelicula C", poster: "./Kingkong.jpg" },
-        { id: 4, titulo: "Pelicula D", poster: "./Kingkong.jpg" },
-      ],
+      peliculas: [],
+      peliculaDestacada: null,
+      peliculasProximas: [],
     };
   },
+  mounted() {
+    this.fetchPeliculas();
+  }
 };
 </script>
 
 <style scoped>
-.container {
+    .container {
   background-color: #000;
   color: #fff;
+  padding-left: 10%; /* Agregamos padding en lugar de margen izquierdo */
+  padding-right: 10%;
+  margin-top: 62px;
 }
 
 h1, h2, h3, p {
@@ -83,9 +92,10 @@ h2 {
   margin-bottom: 20px;
 }
 
-.movie-of-the-week .movie-poster {
-  width: 200px;
+.movie-of-the-week .movie-poster-large {
+  width: 100%; /* Utiliza todo el ancho disponible */
   height: auto;
+  max-width: 400px; /* Limita el ancho máximo */
   margin-right: 20px;
 }
 
@@ -95,23 +105,27 @@ h2 {
 
 .upcoming-movies {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en una nueva línea */
+  gap: 20px; /* Espacio entre las películas */
 }
 
 .movie {
-  width: calc(33% - 10px); /* 33% del ancho del contenedor, menos el espacio entre las películas */
+  width: calc(25% - 10px); /* 25% del ancho del contenedor, menos el espacio entre las películas */
+  margin-bottom: 20px;
+  margin-right: 50px;
 }
 
 .movie h3 {
   margin-top: 10px;
 }
 
-.movie-poster {
-  width: 100%;
+.movie-poster-small {
+  width: 100%; /* Utiliza todo el ancho disponible */
   height: auto;
+  max-width: 300px; /* Limita el ancho máximo */
 }
 
-body{
+body {
   margin: 0%;
 }
 
@@ -132,9 +146,15 @@ body{
 @media screen and (max-width: 768px) {
   /* Estilos específicos para pantallas con un ancho máximo de 768px (tamaño móvil) */
   .container {
-    margin-top: 200px; /* Cam bia el margen superior para la versión móvil */
+    margin-top: 200px; /* Cambia el margen superior para la versión móvil */
+  }
+
+  .upcoming-movies {
+    justify-content: center; /* Centra las películas en pantallas pequeñas */
+  }
+
+  .movie {
+    width: calc(50% - 10px); /* Muestra dos películas por fila en dispositivos pequeños */
   }
 }
-
-
 </style>
