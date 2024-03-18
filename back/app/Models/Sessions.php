@@ -15,7 +15,7 @@ class Sesion extends Model
         'asientos_disponibles',
         'tipo_sesion',
         'subtitulada',
-        // 'precio', si decides mantener el precio aquí por alguna razón
+        
     ];
 
     protected static function boot()
