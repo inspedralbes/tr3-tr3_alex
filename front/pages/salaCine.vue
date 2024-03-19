@@ -1,5 +1,6 @@
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
+    <h2>Película Seleccionada: {{ peliculaTitulo }}</h2>
     <div class="row" v-for="row in 10" :key="row">
       <div
         class="seat"
@@ -16,29 +17,24 @@
 
 <script>
 export default {
-  data() {
-    return {
-      // Inicialmente, todos los asientos están no seleccionados
-      selectedSeats: [],
-    };
+  props: {
+    peliculaTitulo: {
+      type: String,
+      required: true
+    },
+    isSelected: {
+      type: Function,
+      required: true
+    }
   },
   methods: {
     selectSeat(row, seat) {
-      const seatId = `${row}-${seat}`;
-      const index = this.selectedSeats.indexOf(seatId);
-      if (index === -1) {
-        this.selectedSeats.push(seatId);
-      } else {
-        this.selectedSeats.splice(index, 1);
-      }
-    },
-    isSelected(row, seat) {
-      return this.selectedSeats.includes(`${row}-${seat}`);
+      // Implementa la lógica para seleccionar un asiento
     },
     hoverSeat(row, seat, isHovering) {
-      // Puedes implementar lógica adicional para el evento hover si lo deseas
-    },
-  },
+      // Implementa la lógica para el evento hover
+    }
+  }
 };
 </script>
 
