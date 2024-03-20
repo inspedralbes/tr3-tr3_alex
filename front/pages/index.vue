@@ -30,7 +30,7 @@
 
 <script>
 import { ref } from 'vue'
-import { usePeliculaDestacadaStore } from '/store/peliculaDestacadaStore'
+import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
 import { useRouter } from 'vue-router'
 
 export default {
