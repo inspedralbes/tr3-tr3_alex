@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <!-- Película de esta semana -->
     <section>
       <h2>Película de esta Semana</h2>
@@ -35,11 +34,10 @@ import { usePeliculaDestacadaStore } from '/store/peliculaDestacadaStore'
 import { useRouter } from 'vue-router'
 
 export default {
-  
   setup() {
     const peliculaDestacadaStore = usePeliculaDestacadaStore()
-   
-    
+    const router = useRouter()
+
     const peliculas = ref([])
     const peliculaDestacada = ref(null)
     const peliculasProximas = ref([])
@@ -63,26 +61,16 @@ export default {
       }
     }
 
-    const router = useRouter()
-
     const goToCinemaRoom = () => {
       router.push('/salaCine')
     }
 
-    // Función para verificar si un asiento está seleccionado
-    const isSelected = (row, seat) => {
-      // Aquí debes implementar la lógica para determinar si el asiento está seleccionado
-      // Por ahora, simplemente retornará false
-      return false;
-    }
-
     fetchPeliculas()
 
-    return { peliculas, peliculaDestacada, peliculasProximas, goToCinemaRoom, isSelected }
+    return { peliculas, peliculaDestacada, peliculasProximas, goToCinemaRoom }
   }
 }
 </script>
-
 
 <style scoped>
 .container {
