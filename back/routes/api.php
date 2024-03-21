@@ -17,7 +17,7 @@ use App\Http\Controllers\SesionController;
 |
 */
 Route::get('/peliculas', [PeliculaController::class,'listarPeliculas']);
-Route::get('/sesiones', [SesionController::class, 'listarSesions']);
+Route::get('/sesiones', [SesionController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

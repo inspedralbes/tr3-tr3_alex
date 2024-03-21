@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sesion extends Model
+class Sessions extends Model
 {
     use HasFactory;
 
@@ -12,26 +12,14 @@ class Sesion extends Model
     protected $fillable = [
         'pelicula_id',
         'fecha_hora',
-        'asientos_disponibles',
         'tipo_sesion',
         'subtitulada',
         
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Define el evento created
-        static::created(function ($sesion) {
-            // Lógica para asignar las fechas de las sesiones
-            $sesion->assignDates();
-        });
-    }
-
     public function pelicula()
     {
-        return $this->belongsTo(Pelicula::class, 'pelicula_id');
+        return $this->belongsTo(Peliculas::class, 'pelicula_id');
     }
 
     public function entradas()

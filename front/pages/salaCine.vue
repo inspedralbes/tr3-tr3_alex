@@ -1,17 +1,10 @@
-
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
     <h1>{{ movie.titulo }}</h1>
     <div class="row" v-for="row in 10" :key="row">
-      <div
-        class="seat"
-        v-for="seat in 12"
-        :key="seat"
-        :class="{ 'selected': isSelected(row, seat) }"
-        @click="selectSeat(row, seat)"
-        @mouseover="hoverSeat(row, seat, true)"
-        @mouseleave="hoverSeat(row, seat, false)"
-      >
+      <div class="seat" v-for="seat in 12" :key="seat" :class="{ 'selected': isSelected(row, seat) }"
+        @click="selectSeat(row, seat)" @mouseover="hoverSeat(row, seat, true)"
+        @mouseleave="hoverSeat(row, seat, false)">
         <!-- Número de butaca oculto -->
         <span class="hidden">{{ seat }}</span>
       </div>
@@ -24,8 +17,9 @@
         </li>
       </ul>
       <p>Total: {{ totalEntradas }}€</p>
-      
-      <button class="buy-ticket-button" @click="goToTicketroom"  :disabled="selectedSeats.length === 0" >Confirmar compra</button>
+
+      <button class="buy-ticket-button" @click="goToTicketroom()" :disabled="selectedSeats.length === 0">Confirmar
+        compra</button>
     </div>
   </div>
 </template>
@@ -33,7 +27,7 @@
 <script>
 
 import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
-import { useRouter } from 'vue-router'
+
 
 export default {
   data() {
@@ -46,7 +40,7 @@ export default {
     totalEntradas() {
       return this.selectedSeats.length * this.precioButaca;
     },
-    movie(){
+    movie() {
       const peliculaDestacadaStore = usePeliculaDestacadaStore();
       return peliculaDestacadaStore.peliculaDestacada;
     }
@@ -73,8 +67,19 @@ export default {
       // Aquí puedes implementar lógica adicional para el evento hover si lo deseas
     },
     goToTicketroom() {
-      const router = useRouter()
-      router.push('/ticket');
+      console.log('Butacas seleccionadas:', this.selectedSeats);
+      this.$router.push({ path: '/ticket' });
+      
+
+      // Construye un array de objetos con las coordenadas de fila y asiento de las butacas ocupadas
+      const butacasOcupadas = this.selectedSeats.map(seatId => {
+        const [row, seat] = seatId.split('-');
+        return { fila: row, asiento: seat };
+      });
+
+      // Llama al método para actualizar las butacas ocupadas en la misma store
+      const peliculaDestacadaStore = usePeliculaDestacadaStore();
+      peliculaDestacadaStore.actualizarButacasOcupadas(butacasOcupadas);
     }
   },
 };
@@ -136,6 +141,11 @@ export default {
 .purchase-info {
   color: white;
   margin-top: 20px;
+}
+
+h1 {
+  color: white;
+  text-align: center;
 }
 
 h3 {
