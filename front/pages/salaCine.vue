@@ -1,6 +1,7 @@
-User
+
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
+    <h1>{{ movie.titulo }}</h1>
     <div class="row" v-for="row in 10" :key="row">
       <div
         class="seat"
@@ -23,20 +24,21 @@ User
         </li>
       </ul>
       <p>Total: {{ totalEntradas }}€</p>
-      <button @click="goToTicketroom" :disabled="selectedSeats.length === 0">Confirmar compra</button>
+      
+      <button class="buy-ticket-button" @click="goToTicketroom"  :disabled="selectedSeats.length === 0" >Confirmar compra</button>
     </div>
   </div>
 </template>
 
 <script>
-import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore.js';
-import { useRouter } from 'vue-router'; // Asegúrate de importar el router si no lo has hecho aún
+
+import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
+import { useRouter } from 'vue-router'
 
 export default {
   data() {
     return {
       selectedSeats: [],
-      movie: null,
       precioButaca: 10, // Precio por defecto
     };
   },
@@ -44,10 +46,15 @@ export default {
     totalEntradas() {
       return this.selectedSeats.length * this.precioButaca;
     },
+    movie(){
+      const peliculaDestacadaStore = usePeliculaDestacadaStore();
+      return peliculaDestacadaStore.peliculaDestacada;
+    }
   },
-  mounted() {
-    const peliculaDestacadaStore = usePeliculaDestacadaStore();
-    this.movie = peliculaDestacadaStore.peliculaDestacada;
+  setup() {
+    // const peliculaDestacadaStore = usePeliculaDestacadaStore()
+    // console.log("Hail hitler");
+    // this.movie = peliculaDestacadaStore.peliculaDestacada;
   },
   methods: {
     selectSeat(row, seat) {
@@ -66,8 +73,8 @@ export default {
       // Aquí puedes implementar lógica adicional para el evento hover si lo deseas
     },
     goToTicketroom() {
-      const router = useRouter(); // Obtén el objeto router
-      router.push('/salaCine');
+      const router = useRouter()
+      router.push('/ticket');
     }
   },
 };
@@ -86,6 +93,20 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+.buy-ticket-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* .buy-ticket-button:hover {
+  background-color: #0056b3;
+} */
 
 .seat {
   width: 30px;

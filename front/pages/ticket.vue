@@ -1,12 +1,12 @@
 <template>
     <div>
       <h1>Confirmación de compra</h1>
-      <h2>Película: {{ movie }}</h2>
+      <!-- <h2>Película: {{ movie }}</h2> -->
       <h3>Butacas seleccionadas:</h3>
       <ul>
-        <li v-for="(seat, index) in selectedSeats" :key="index">
+        <!-- <li v-for="(seat, index) in selectedSeats" :key="index">
           Butaca {{ seat }}
-        </li>
+        </li> -->
       </ul>
     </div>
   </template>
