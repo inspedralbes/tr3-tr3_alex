@@ -1,6 +1,6 @@
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
-    <h1>{{ movie.titulo }}</h1>
+    <h1>{{ session.pelicula.titulo }}</h1>
     <div class="row" v-for="row in 10" :key="row">
       <div class="seat" v-for="seat in 12" :key="seat" :class="{ 'selected': isSelected(row, seat) }"
         @click="selectSeat(row, seat)" @mouseover="hoverSeat(row, seat, true)"
@@ -23,17 +23,16 @@
     </div>
   </div>
 </template>
-
 <script>
-
 import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
 
-
 export default {
+
   data() {
     return {
       selectedSeats: [],
       precioButaca: 10, // Precio por defecto
+
     };
   },
   computed: {
@@ -45,12 +44,28 @@ export default {
       return peliculaDestacadaStore.peliculaDestacada;
     }
   },
-  setup() {
-    // const peliculaDestacadaStore = usePeliculaDestacadaStore()
-    // console.log("Hail hitler");
-    // this.movie = peliculaDestacadaStore.peliculaDestacada;
+  mounted() {
+    this.fetchSession();
   },
   methods: {
+    fetchSession() {
+
+      Alomejor tengo esto mal planteado y no tengo que coger los datos de session?
+      const sessionId = parseInt(this.$route.params.id);
+      fetch(`http://localhost:8000/api/sesiones/${sessionId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.session = data;
+        })
+        .catch(error => {
+          console.error('There has been a problem with your fetch operation:', error);
+        });
+    },
     selectSeat(row, seat) {
       const seatId = `${row}-${seat}`;
       const index = this.selectedSeats.indexOf(seatId);
@@ -69,7 +84,6 @@ export default {
     goToTicketroom() {
       console.log('Butacas seleccionadas:', this.selectedSeats);
       this.$router.push({ path: '/ticket' });
-      
 
       // Construye un array de objetos con las coordenadas de fila y asiento de las butacas ocupadas
       const butacasOcupadas = this.selectedSeats.map(seatId => {
@@ -77,9 +91,7 @@ export default {
         return { fila: row, asiento: seat };
       });
 
-      // Llama al método para actualizar las butacas ocupadas en la misma store
-      const peliculaDestacadaStore = usePeliculaDestacadaStore();
-      peliculaDestacadaStore.actualizarButacasOcupadas(butacasOcupadas);
+
     }
   },
 };
