@@ -82,3 +82,4 @@ h3 {
   color: white;
 }
 </style>
+~/stores/peliculaStore

@@ -1,6 +1,6 @@
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
-    <h1>{{ session.pelicula.titulo }}</h1>
+    <!-- <h1>{{ session.pelicula.titulo }}</h1> -->
     <div class="row" v-for="row in 10" :key="row">
       <div class="seat" v-for="seat in 12" :key="seat" :class="{ 'selected': isSelected(row, seat) }"
         @click="selectSeat(row, seat)" @mouseover="hoverSeat(row, seat, true)"
@@ -24,7 +24,8 @@
   </div>
 </template>
 <script>
-import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
+
+import { usePeliculaStore } from '~/stores/peliculaStore'
 
 export default {
 
@@ -32,7 +33,7 @@ export default {
     return {
       selectedSeats: [],
       precioButaca: 10, // Precio por defecto
-
+      session: null, // Agregar una propiedad para almacenar la sesión
     };
   },
   computed: {
@@ -40,8 +41,8 @@ export default {
       return this.selectedSeats.length * this.precioButaca;
     },
     movie() {
-      const peliculaDestacadaStore = usePeliculaDestacadaStore();
-      return peliculaDestacadaStore.peliculaDestacada;
+      const peliculaStore = usePeliculaStore();
+      return peliculaStore.peliculaMasReciente; // Utilizar la película más reciente de la tienda de películas
     }
   },
   mounted() {
@@ -49,8 +50,7 @@ export default {
   },
   methods: {
     fetchSession() {
-
-      Alomejor tengo esto mal planteado y no tengo que coger los datos de session?
+      // Alomejor tengo esto mal planteado y no tengo que coger los datos de session?
       const sessionId = parseInt(this.$route.params.id);
       fetch(`http://localhost:8000/api/sesiones/${sessionId}`)
         .then(response => {
@@ -91,11 +91,14 @@ export default {
         return { fila: row, asiento: seat };
       });
 
-
+      // Actualiza las butacas ocupadas en la tienda de películas
+      const peliculaStore = usePeliculaStore();
+      peliculaStore.actualizarButacasOcupadas(butacasOcupadas);
     }
   },
 };
 </script>
+
 
 
 <style scoped>
@@ -163,4 +166,4 @@ h1 {
 h3 {
   color: white;
 }
-</style>
+</style>~/stores/peliculaStore

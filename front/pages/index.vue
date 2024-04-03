@@ -2,16 +2,17 @@
   <div class="container">
     <section>
 
-
-      <!-- Mostrar la película más reciente -->
-      <div v-if="peliculaMasReciente" class="movie-of-the-week">
-        <img :src="peliculaMasReciente.pelicula.poster" :alt="peliculaMasReciente.pelicula.titulo"
-          class="movie-poster-large">
-        <div class="movie-details">
-          <h4>{{ peliculaMasReciente.pelicula.titulo }}</h4>
-          <c3>{{ peliculaMasReciente.pelicula.sinopsis }}</c3>
-          <p>Fecha de estreno: {{ formatFecha(peliculaMasReciente.fecha_hora) }}</p>
-          <nuxt-link :to="'/' + peliculaMasReciente.id " class="buy-ticket-button">Reservar entrada</nuxt-link>
+      <div class="container">
+        <!-- Mostrar la película más reciente -->
+        <div v-if="peliculaMasReciente" class="movie-of-the-week upcoming-movies">
+          <img :src="peliculaMasReciente.pelicula.poster" :alt="peliculaMasReciente.pelicula.titulo"
+            class="movie-poster-large">
+          <div class="movie-details">
+            <h4>{{ peliculaMasReciente.pelicula.titulo }}</h4>
+            <c3>{{ peliculaMasReciente.pelicula.sinopsis }}</c3>
+            <p>Fecha de estreno: {{ formatFecha(peliculaMasReciente.fecha_hora) }}</p>
+            <nuxt-link :to="'/' + peliculaMasReciente.id" class="buy-ticket-button">Reservar entrada</nuxt-link>
+          </div>
         </div>
       </div>
 
@@ -23,7 +24,7 @@
           <img :src="sesion.pelicula.poster" :alt="sesion.pelicula.titulo" class="movie-poster-small">
           <h3>{{ sesion.pelicula.titulo }}</h3>
           <p>Fecha de estreno: {{ formatFecha(sesion.fecha_hora) }}</p>
-          <nuxt-link :to="'/' + sesion.id " class="buy-ticket-button">Reservar entrada</nuxt-link>
+          <nuxt-link :to="'/' + sesion.id" class="buy-ticket-button">Reservar entrada</nuxt-link>
         </div>
       </div>
     </section>
@@ -31,24 +32,22 @@
 </template>
 
 <script>
-import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
+import { usePeliculaStore } from '~/stores/peliculaStore'
 
 export default {
-  setup() {
-    const peliculaDestacadaStore = usePeliculaDestacadaStore()
-  },
-
   data() {
     return {
       sesiones: [],
       peliculaMasReciente: null
     }
   },
-  mounted() {
-    this.fetchSesiones();
+  created() {
+    this.fetchSesiones(); // Llamar al método fetchSesiones al cargar la página
   },
   methods: {
     fetchSesiones() {
+      const peliculaStore = usePeliculaStore();
+
       fetch('http://localhost:8000/api/sesiones')
         .then(response => {
           if (!response.ok) {
@@ -63,31 +62,29 @@ export default {
           // Asignar la primera sesión como la película más reciente
           this.peliculaMasReciente = this.sesiones.length > 0 ? this.sesiones[0] : null;
 
+          // Guardar la película más reciente en la tienda de películas
+          if (this.peliculaMasReciente) {
+            peliculaStore.actualizarPelicula(this.peliculaMasReciente.id, this.peliculaMasReciente.pelicula);
+          }
+
           // Eliminar la primera sesión de la lista de sesiones
           this.sesiones = this.sesiones.slice(1);
+
+          // Guardar información de todas las películas en la tienda de películas
+          this.sesiones.forEach(sesion => {
+            peliculaStore.actualizarPelicula(sesion.id, sesion.pelicula);
+          });
         })
         .catch(error => {
           console.error('There has been a problem with your fetch operation:', error);
         });
     },
-    reservarEntrada(sesionId) {
-      // Redirigir al usuario a la página "/salaCine"
-      this.$router.push('/salaCine');
-
-      // Lógica para guardar la sesión en Pinia
-      const store = useSesionCompraStore();
-      store.setSesionID(sesionId);
-    },
     formatFecha(fecha) {
       return new Date(fecha).toLocaleDateString();
     },
-
   }
 }
 </script>
-
-
-
 
 <style scoped>
 .container {
@@ -183,17 +180,18 @@ body {
 .buy-ticket-button:hover {
   background-color: #0056b3;
 }
+
 a:-webkit-any-link {
-   
-    cursor: pointer;
-    text-decoration: none;
+
+  cursor: pointer;
+  text-decoration: none;
 }
 
 @media screen and (max-width: 768px) {
 
   /* Estilos específicos para pantallas con un ancho máximo de 768px (tamaño móvil) */
   .container {
-    margin-top: 200px;
+    margin-top: 62px;
     /* Cambia el margen superior para la versión móvil */
   }
 
