@@ -19,4 +19,10 @@ class PeliculaController extends Controller
         ]);
         
     }
+
+    public function show($id)
+    {
+        $pelicula = Peliculas::findOrFail($id);
+        return response()->json($pelicula);
+    }
 }

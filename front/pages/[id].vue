@@ -1,11 +1,10 @@
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
-    <!-- <h1>{{ session.pelicula.titulo }}</h1> -->
+    <h1>{{ movie.titulo }}</h1>
     <div class="row" v-for="row in 10" :key="row">
       <div class="seat" v-for="seat in 12" :key="seat" :class="{ 'selected': isSelected(row, seat) }"
         @click="selectSeat(row, seat)" @mouseover="hoverSeat(row, seat, true)"
         @mouseleave="hoverSeat(row, seat, false)">
-        <!-- Número de butaca oculto -->
         <span class="hidden">{{ seat }}</span>
       </div>
     </div>
@@ -17,23 +16,21 @@
         </li>
       </ul>
       <p>Total: {{ totalEntradas }}€</p>
-
-      <button class="buy-ticket-button" @click="goToTicketroom()" :disabled="selectedSeats.length === 0">Confirmar
+      <button class="buy-ticket-button" @click="goToTicketroom()" :disabled="selectedSeats.length === 0">Continuar
         compra</button>
     </div>
   </div>
 </template>
-<script>
 
+<script>
 import { usePeliculaStore } from '~/stores/peliculaStore'
 
 export default {
-
   data() {
     return {
       selectedSeats: [],
       precioButaca: 10, // Precio por defecto
-      session: null, // Agregar una propiedad para almacenar la sesión
+      session: null,
     };
   },
   computed: {
@@ -42,7 +39,7 @@ export default {
     },
     movie() {
       const peliculaStore = usePeliculaStore();
-      return peliculaStore.peliculaMasReciente; // Utilizar la película más reciente de la tienda de películas
+      return peliculaStore.peliculas[this.$route.params.id] || {}; // Obtener la película correspondiente a la ID de la ruta
     }
   },
   mounted() {
@@ -50,21 +47,7 @@ export default {
   },
   methods: {
     fetchSession() {
-      // Alomejor tengo esto mal planteado y no tengo que coger los datos de session?
-      const sessionId = parseInt(this.$route.params.id);
-      fetch(`http://localhost:8000/api/sesiones/${sessionId}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          this.session = data;
-        })
-        .catch(error => {
-          console.error('There has been a problem with your fetch operation:', error);
-        });
+      // Puedes agregar aquí la lógica para obtener la sesión, si es necesario
     },
     selectSeat(row, seat) {
       const seatId = `${row}-${seat}`;
@@ -83,23 +66,21 @@ export default {
     },
     goToTicketroom() {
       console.log('Butacas seleccionadas:', this.selectedSeats);
-      this.$router.push({ path: '/ticket' });
+      // Redirige a la página de tickets manteniendo la ID de la película en la URL
+      this.$router.push({ path: `/ticket` });
 
       // Construye un array de objetos con las coordenadas de fila y asiento de las butacas ocupadas
-      const butacasOcupadas = this.selectedSeats.map(seatId => {
-        const [row, seat] = seatId.split('-');
-        return { fila: row, asiento: seat };
-      });
-
+      // const butacasOcupadas = this.selectedSeats.map(seatId => {
+      //   const [row, seat] = seatId.split('-');
+      //   return { fila: row, asiento: seat };
+      // });
       // Actualiza las butacas ocupadas en la tienda de películas
       const peliculaStore = usePeliculaStore();
-      peliculaStore.actualizarButacasOcupadas(butacasOcupadas);
+      peliculaStore.actualizarButacasOcupadas(this.selectedSeats);
     }
   },
 };
 </script>
-
-
 
 <style scoped>
 .cinema-container {

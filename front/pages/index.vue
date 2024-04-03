@@ -11,7 +11,7 @@
             <h4>{{ peliculaMasReciente.pelicula.titulo }}</h4>
             <c3>{{ peliculaMasReciente.pelicula.sinopsis }}</c3>
             <p>Fecha de estreno: {{ formatFecha(peliculaMasReciente.fecha_hora) }}</p>
-            <nuxt-link :to="'/' + peliculaMasReciente.id" class="buy-ticket-button">Reservar entrada</nuxt-link>
+            <nuxt-link :to="'/' + peliculaMasReciente.id" class="buy-ticket-button" @click="guardarPeliculaSeleccionada(peliculaMasReciente.id)">Reservar entrada</nuxt-link>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
           <img :src="sesion.pelicula.poster" :alt="sesion.pelicula.titulo" class="movie-poster-small">
           <h3>{{ sesion.pelicula.titulo }}</h3>
           <p>Fecha de estreno: {{ formatFecha(sesion.fecha_hora) }}</p>
-          <nuxt-link :to="'/' + sesion.id" class="buy-ticket-button">Reservar entrada</nuxt-link>
+          <nuxt-link :to="'/' + sesion.id" class="buy-ticket-button" @click="guardarPeliculaSeleccionada(sesion.id)">Reservar entrada</nuxt-link>
         </div>
       </div>
     </section>
@@ -82,6 +82,11 @@ export default {
     formatFecha(fecha) {
       return new Date(fecha).toLocaleDateString();
     },
+    guardarPeliculaSeleccionada(id) {
+      const peliculaStore = usePeliculaStore();
+      peliculaStore.setSesionID(id);
+      console.log('ID de la película seleccionada:', id);
+    }
   }
 }
 </script>

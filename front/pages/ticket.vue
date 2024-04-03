@@ -1,36 +1,46 @@
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
     <h1>{{ movie.titulo }}</h1>
-   
+    <img :src="movie.poster" :alt="movie.titulo" class="movie-poster">
+    <p>Fecha de estreno: {{ movie.fecha }}</p>
+    <div class="purchase-info">
+      <h3>Butacas Seleccionadas:</h3>
+      <ul>
+        <li v-for="(butaca, index) in butacasOcupadas" :key="index">
+          Entrada {{ index + 1 }}: Fila {{ butaca.split('-')[0] }}, Asiento {{ butaca.split('-')[1] }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
-
-import { usePeliculaDestacadaStore } from '~/stores/peliculaDestacadaStore'
-
+import { usePeliculaStore } from '~/stores/peliculaStore'
 
 export default {
   data() {
     return {
-      selectedSeats: [],
-         };
+      movie: {}
+    };
   },
-  computed: {
-  
-    movie(){
-      const peliculaDestacadaStore = usePeliculaDestacadaStore();
-      return peliculaDestacadaStore.peliculaDestacada;
-    }
-  },
-  setup() {
-
+  created() {
+    this.fetchMovieData();
   },
   methods: {
+    fetchMovieData() {
+      const peliculaStore = usePeliculaStore();
+      const sesionID = peliculaStore.sesionID;
+      this.movie = peliculaStore.peliculas[sesionID];
+    }
+  },
+  computed: {
+    butacasOcupadas() {
+      const peliculaStore = usePeliculaStore();
+      return peliculaStore.butacasOcupadas;
+    }
   },
 };
 </script>
-
 
 <style scoped>
 .cinema-container {
@@ -40,46 +50,19 @@ export default {
   flex-direction: column;
 }
 
-.buy-ticket-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.movie-poster {
+  max-width: 200px;
 }
 
-.seat {
-  width: 30px;
-  height: 30px;
-  margin: 5px;
-  cursor: pointer;
-  background-color: grey;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.seat.selected {
-  background-color: green;
-}
-
-.seat span {
+h1, p, h3, li {
   color: white;
-}
-
-.hidden {
-  display: none;
 }
 
 .purchase-info {
-  color: white;
   margin-top: 20px;
 }
 
-h3 {
-  color: white;
+ul {
+  list-style-type: none;
 }
 </style>
-~/stores/peliculaStore

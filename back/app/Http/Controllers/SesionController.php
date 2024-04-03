@@ -18,7 +18,7 @@ class SesionController extends Controller
     // Método para mostrar una sesión específica
     public function show($id)
     {
-        $sesion = Sessions::find($id);
+        $sesion = Sessions::with('pelicula')->findOrFail($id);
         return response()->json($sesion);
     }
 
