@@ -38,17 +38,24 @@ export default {
     },
     finalizarCompra() {
       const peliculaStore = usePeliculaStore();
+      const sesion_cine_id = peliculaStore.sesionID;
+      const peliculaActual = peliculaStore.pelicula;
+      const entradas = peliculaStore.butacasOcupadas.map((butaca, index) => {
+        const fila = butaca.split('-')[0];
+        const asiento = butaca.split('-')[1];
+        return {
+          sesion_cine_id: sesion_cine_id,
+          numero_entrada: index + 1,
+          Fila: fila,
+          Asiento: asiento,
+          created_at: peliculaActual.created_at, // Utilizamos la fecha de creación de la película actual
+          updated_at: peliculaActual.updated_at // Utilizamos la fecha de actualización de la película actual
+        };
+      });
+
       const dataToSend = {
-        sesion_cine_id: peliculaStore.sesionID,
-        entradas: peliculaStore.butacasOcupadas.map(butaca => {
-          const fila = butaca.split('-')[0];
-          const asiento = butaca.split('-')[1];
-          return {
-            numero_entrada: null, // Debes reemplazar null con el número de entrada si lo tienes disponible
-            Fila: fila,
-            Asiento: asiento
-          };
-        })
+        pelicula: peliculaActual,
+        butacas: entradas
       };
 
       fetch('http://localhost:8000/api/entradas', {
@@ -58,21 +65,22 @@ export default {
         },
         body: JSON.stringify(dataToSend)
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al finalizar la compra');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Compra finalizada exitosamente', data);
-        // Realizar cualquier otra acción necesaria después de completar la compra
-      })
-      .catch(error => {
-        console.error('Error al finalizar la compra:', error);
-        // Manejar el error de alguna manera
-      });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al finalizar la compra');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Compra finalizada exitosamente', data);
+          // Realizar cualquier otra acción necesaria después de completar la compra
+        })
+        .catch(error => {
+          console.error('Error al finalizar la compra:', error);
+          // Manejar el error de alguna manera
+        });
     }
+
   },
   computed: {
     butacasOcupadas() {
@@ -102,11 +110,12 @@ export default {
   max-width: 200px;
 }
 
-h1, h3{
+h1,
+h3 {
   margin: 0;
 }
 
-li{
+li {
   margin-bottom: 10px;
 
 }
