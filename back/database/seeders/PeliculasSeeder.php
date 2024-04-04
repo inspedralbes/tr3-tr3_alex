@@ -58,6 +58,24 @@ class PeliculasSeeder extends Seeder
                 'sinopsis' => 'Un chico de la ciudad y una chica de un pueblo intercambian cuerpos en sus sueños.',
                 'created_at' => '2024-03-15 11:11:18',
                 'updated_at' => '2024-03-15 11:11:18'
+            ],
+            [
+                'id' => 6,
+                'titulo' => 'Berserk: Golden Age',
+                'duracion' => 120,
+                'poster' => 'berserk_golden_age.webp',
+                'sinopsis' => 'Guts, un guerrero solitario con un pasado oscuro, se une a los Jinetes del Halcón, liderados por Griffith, en su búsqueda de gloria y venganza en un mundo medieval brutal.',
+                'created_at' => '2024-04-04 10:00:00',
+                'updated_at' => '2024-04-04 10:00:00'
+            ],
+            [
+                'id' => 7,
+                'titulo' => 'Godzilla (1998)',
+                'duracion' => 139,
+                'poster' => 'godzilla.webp',
+                'sinopsis' => 'Un enorme monstruo mutante creado por la exposición a la radiación nuclear causa estragos en Nueva York, mientras el ejército lucha por detenerlo.',
+                'created_at' => '2024-04-04 11:00:00',
+                'updated_at' => '2024-04-04 11:00:00'
             ]
         ]);
     }

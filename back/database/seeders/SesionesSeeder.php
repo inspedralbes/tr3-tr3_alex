@@ -58,6 +58,24 @@ class SesionesSeeder extends Seeder
                 'precio' => 10.99,
                 'precio_Vip' => 15.99,
                 'Vip' => 1
+            ],
+            [
+                'pelicula_id' => 6,
+                'fecha_hora' => '2024-05-02 10:00:00',
+                'tipo_sesion' => '2D',
+                'subtitulada' => 0,
+                'precio' => 10.99,
+                'precio_Vip' => 15.99,
+                'Vip' => 1
+            ], 
+            [
+                'pelicula_id' => 7,
+                'fecha_hora' => '2024-05-02 10:00:00',
+                'tipo_sesion' => '3D',
+                'subtitulada' => 0,
+                'precio' => 10.99,
+                'precio_Vip' => 15.99,
+                'Vip' => 1
             ]
         ]);
     }
