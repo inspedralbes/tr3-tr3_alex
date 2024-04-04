@@ -14,6 +14,9 @@ class Sessions extends Model
         'fecha_hora',
         'tipo_sesion',
         'subtitulada',
+        'precio',
+        'precio_Vip',
+        'Vip',
         
     ];
 

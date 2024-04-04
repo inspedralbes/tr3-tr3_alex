@@ -1,8 +1,11 @@
 <template>
   <div class="cinema-container" style="margin-top: 62px;">
     <h1>{{ movie.titulo }}</h1>
-    <img :src="movie.poster" :alt="movie.titulo" class="movie-poster">
-    <p>Fecha de estreno: {{ movie.fecha }}</p>
+
+    <div class="movie-poster-container">
+      <img :src="movie.poster" :alt="movie.titulo" class="movie-poster">
+    </div>
+
     <div class="purchase-info">
       <h3>Butacas Seleccionadas:</h3>
       <ul>
@@ -11,11 +14,12 @@
         </li>
       </ul>
     </div>
+    <button class="buy-ticket-button" @click="finalizarCompra">Finalizar compra</button>
   </div>
 </template>
 
 <script>
-import { usePeliculaStore } from '~/stores/peliculaStore'
+import { usePeliculaStore } from '~/stores/peliculaStore';
 
 export default {
   data() {
@@ -31,6 +35,43 @@ export default {
       const peliculaStore = usePeliculaStore();
       const sesionID = peliculaStore.sesionID;
       this.movie = peliculaStore.peliculas[sesionID];
+    },
+    finalizarCompra() {
+      const peliculaStore = usePeliculaStore();
+      const dataToSend = {
+        sesion_cine_id: peliculaStore.sesionID,
+        entradas: peliculaStore.butacasOcupadas.map(butaca => {
+          const fila = butaca.split('-')[0];
+          const asiento = butaca.split('-')[1];
+          return {
+            numero_entrada: null, // Debes reemplazar null con el número de entrada si lo tienes disponible
+            Fila: fila,
+            Asiento: asiento
+          };
+        })
+      };
+
+      fetch('http://localhost:8000/api/entradas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al finalizar la compra');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Compra finalizada exitosamente', data);
+        // Realizar cualquier otra acción necesaria después de completar la compra
+      })
+      .catch(error => {
+        console.error('Error al finalizar la compra:', error);
+        // Manejar el error de alguna manera
+      });
     }
   },
   computed: {
@@ -44,25 +85,46 @@ export default {
 
 <style scoped>
 .cinema-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
   background-color: black;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  color: white;
+}
+
+.movie-poster-container {
+  grid-column: 1;
 }
 
 .movie-poster {
   max-width: 200px;
 }
 
-h1, p, h3, li {
-  color: white;
+h1, h3{
+  margin: 0;
+}
+
+li{
+  margin-bottom: 10px;
+
 }
 
 .purchase-info {
-  margin-top: 20px;
+  grid-column: 2;
 }
 
 ul {
   list-style-type: none;
+}
+
+.buy-ticket-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>

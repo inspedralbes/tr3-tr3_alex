@@ -21,6 +21,7 @@ class SesionController extends Controller
         $sesion = Sessions::with('pelicula')->findOrFail($id);
         return response()->json($sesion);
     }
-
+  
+     
     // Otros métodos para crear, actualizar y eliminar sesiones
 }

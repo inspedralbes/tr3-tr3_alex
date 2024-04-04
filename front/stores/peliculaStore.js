@@ -4,6 +4,7 @@ export const usePeliculaStore = defineStore('pelicula', () =>{
   const peliculas = ref([]);
   const butacasOcupadas = ref([]);
   const sesionID = ref(0);
+  
 
   function actualizarPelicula(id, pelicula) {
     peliculas.value[id] = pelicula;
@@ -17,6 +18,7 @@ export const usePeliculaStore = defineStore('pelicula', () =>{
     sesionID.value = sesionId;
   }
 
+
   return {
     peliculas,
     butacasOcupadas,
@@ -24,6 +26,7 @@ export const usePeliculaStore = defineStore('pelicula', () =>{
     actualizarPelicula,
     actualizarButacasOcupadas,
     setSesionID
+
   
 }
 

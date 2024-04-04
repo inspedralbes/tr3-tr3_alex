@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sesiones_cine', function (Blueprint $table) {
+        Schema::create('Sessions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pelicula_id');
             $table->foreign('pelicula_id')->references('id')->on('peliculas');
             $table->datetime('fecha_hora'); // Fecha y hora de la sesión
-            $table->integer('asientos_disponibles');
+            // $table->integer('asientos_disponibles');
             $table->string('tipo_sesion'); // Por ejemplo, 2D, 3D, IMAX
             $table->boolean('subtitulada'); // Indica si la sesión es subtitulada
+            $table->integer('precio'); // Precio de la entrada
+            $table->integer('precio_Vip'); // Precio de la entrada VIP
+            $table->boolean('Vip'); // Indica si la sesión es VIP
             $table->timestamps();
         });
         
