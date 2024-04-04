@@ -8,7 +8,7 @@ class Sessions extends Model
 {
     use HasFactory;
 
-    protected $table = 'sesiones_cine';
+    protected $table = 'sessions';
     protected $fillable = [
         'pelicula_id',
         'fecha_hora',
