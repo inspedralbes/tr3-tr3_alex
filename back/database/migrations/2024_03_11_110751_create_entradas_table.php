@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sesion_cine_id'); // Relación con la sesión de cine
             $table->foreign('sesion_cine_id')->references('id')->on('Sessions');
-            $table->integer('numero_entrada'); // Número de la entrada
+            $table->string('Butaca'); // Fila+asiento
             $table->string('Fila'); // Fila de la sala
             $table->string('Asiento'); // Asiento de la sala
-            $table->unique(['sesion_cine_id', 'numero_entrada']); // Clave única para evitar entradas duplicadas         
+            $table->unique(['sesion_cine_id', 'Butaca']); // Clave única para evitar entradas duplicadas         
             $table->timestamps(); // Fechas de creación y actualización del registro
         });        
     }

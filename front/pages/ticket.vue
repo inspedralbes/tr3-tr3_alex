@@ -34,29 +34,39 @@ export default {
     fetchMovieData() {
       const peliculaStore = usePeliculaStore();
       const sesionID = peliculaStore.sesionID;
-      this.movie = peliculaStore.peliculas[sesionID];
+      const peliculas = peliculaStore.peliculas;
+
+      if (sesionID !== null && sesionID >= 0 && sesionID < peliculas.length) {
+        this.movie = peliculas[sesionID];
+      } else {
+        console.error('El sesionID no es un índice válido en el array de películas');
+      }
     },
     finalizarCompra() {
       const peliculaStore = usePeliculaStore();
-      const sesion_cine_id = peliculaStore.sesionID;
-      const peliculaActual = peliculaStore.pelicula;
-      const entradas = peliculaStore.butacasOcupadas.map((butaca, index) => {
-        const fila = butaca.split('-')[0];
-        const asiento = butaca.split('-')[1];
-        return {
-          sesion_cine_id: sesion_cine_id,
-          numero_entrada: index + 1,
-          Fila: fila,
-          Asiento: asiento,
-          created_at: peliculaActual.created_at, // Utilizamos la fecha de creación de la película actual
-          updated_at: peliculaActual.updated_at // Utilizamos la fecha de actualización de la película actual
-        };
-      });
+      const peliculaActual = this.movie;
+
+      if (!peliculaActual) {
+        console.error('La película actual no está definida');
+        return;
+      }
 
       const dataToSend = {
-        pelicula: peliculaActual,
-        butacas: entradas
+        sesion_id: peliculaStore.sesionID,
+        asientos: peliculaStore.butacasOcupadas.map((butaca, index) => {
+          const fila = butaca.split('-')[0];
+          const asiento = butaca.split('-')[1];
+          return {
+            sesion_cine_id: peliculaStore.sesionID,
+            Butaca: peliculaStore.butacasOcupadas[index],
+            Fila: fila,
+            Asiento: asiento
+          };
+        }),
+        
       };
+
+      console.log(dataToSend);
 
       fetch('http://localhost:8000/api/entradas', {
         method: 'POST',
@@ -72,14 +82,17 @@ export default {
           return response.json();
         })
         .then(data => {
-          console.log('Compra finalizada exitosamente', data);
-          // Realizar cualquier otra acción necesaria después de completar la compra
+          console.log('Entrada comprada exitosamente:', data);
+          setTimeout(() => {
+            // Realizar cualquier otra acción necesaria después de completar la compra
+          }, 2000);
         })
         .catch(error => {
           console.error('Error al finalizar la compra:', error);
-          // Manejar el error de alguna manera
         });
     }
+
+
 
   },
   computed: {

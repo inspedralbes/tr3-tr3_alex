@@ -13,7 +13,7 @@ class Entradas extends Model
     protected $table = 'entradas';
     protected $fillable = [
         'sesion_cine_id',
-        'numero_entrada',
+        'Butaca',
         'Fila',
         'Asiento',
         
