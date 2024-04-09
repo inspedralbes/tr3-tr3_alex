@@ -2,18 +2,9 @@
   <div class="cinema-container" style="margin-top: 62px;">
     <h1>{{ movie.titulo }}</h1>
     <div class="row" v-for="row in 10" :key="row">
-      <div class="seat"
-           v-for="seat in 12"
-           :key="seat"
-           :class="[
-             'seat',
-             { 'selected': isSelected(row, seat) },
-             { 'occupied': isOccupied(row, seat) }
-           ]"
-           @click="selectSeat(row, seat)"
-           @mouseover="hoverSeat(row, seat, true)"
-           @mouseleave="hoverSeat(row, seat, false)"
-           :disabled="isOccupied(row, seat)">
+      <div class="seat" v-for="seat in 12" :key="seat"
+        :class="{ 'selected': isSelected(row, seat), 'occupied': isOccupied(row, seat) }" @click="selectSeat(row, seat)"
+        @mouseover="hoverSeat(row, seat, true)" @mouseleave="hoverSeat(row, seat, false)">
         <span class="hidden">{{ seat }}</span>
       </div>
     </div>
@@ -206,6 +197,4 @@ h1 {
 h3 {
   color: white;
 }
-
-
 </style>
