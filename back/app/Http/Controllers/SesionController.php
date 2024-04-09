@@ -1,17 +1,22 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Sessions; // Asegúrate de importar el modelo de Sesion si aún no lo has hecho
+use App\Models\Sessions;
 use Illuminate\Http\Request;
-
 
 class SesionController extends Controller
 {
     // Método para mostrar todas las sesiones
     public function index()
     {
-        $sesiones = Sessions::with('pelicula')->get(); // Asegúrate de tener la relación 'pelicula' en tu modelo 'Sesion
+        $sesiones = Sessions::with('pelicula')->get();
+        
+        foreach ($sesiones as $sesion) {
+            $butacasOcupadas = $sesion->butacas_ocupadas; 
+            $butacasOcupadasArray = explode(',', $butacasOcupadas);
+            $sesion->butacasOcupadas = $butacasOcupadasArray;
+        }
+
         return response()->json($sesiones);
     }
 
@@ -21,7 +26,11 @@ class SesionController extends Controller
         $sesion = Sessions::with('pelicula')->findOrFail($id);
         return response()->json($sesion);
     }
-  
-     
-    // Otros métodos para crear, actualizar y eliminar sesiones
+
+    // Método para mostrar las entradas de una sesión específica
+    public function showEntradas($id)
+    {
+        $sesion = Sessions::with('entradas')->findOrFail($id);
+        return response()->json($sesion);
+    }
 }

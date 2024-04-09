@@ -19,6 +19,8 @@ use App\Http\Controllers\EntradasController;
 */
 Route::get('/peliculas', [PeliculaController::class,'listarPeliculas']);
 Route::get('/sesiones', [SesionController::class, 'index']);
+Route::get('/sesiones/{id}', [SesionController::class, 'show']);
+Route::get('/sesiones-entradas/{id}', [SesionController::class, 'showEntradas']);
 Route::get('/entradas', [EntradasController::class, 'index']);
 Route::post('/entradas', [EntradasController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

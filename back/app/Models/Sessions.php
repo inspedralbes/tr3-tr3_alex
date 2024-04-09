@@ -3,6 +3,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Peliculas;
+use App\Models\Entradas;
 
 class Sessions extends Model
 {
@@ -27,7 +29,7 @@ class Sessions extends Model
 
     public function entradas()
     {
-        return $this->hasMany(Entrada::class, 'sesion_cine_id');
+        return $this->hasMany(Entradas::class, 'sesion_cine_id');
     }
 
     public function assignDates()
