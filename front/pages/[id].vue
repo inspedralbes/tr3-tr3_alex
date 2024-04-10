@@ -3,8 +3,8 @@
     <h1>{{ movie.titulo }}</h1>
     <div class="row" v-for="(row, rowIndex) in seats" :key="rowIndex">
       <div class="seat" v-for="(seat, seatIndex) in row" :key="seatIndex"
-        :class="{ 'selected': seat.selected, 'occupied': seat.occupied }"
-        :disabled="seat.occupied" @click="selectSeat(rowIndex, seatIndex)">
+        :class="{ 'selected': seat.selected, 'occupied': seat.occupied }" :disabled="seat.occupied"
+        @click="selectSeat(rowIndex, seatIndex)">
         <span class="hidden">{{ seat.id }}</span>
       </div>
     </div>
@@ -16,7 +16,8 @@
         </li>
       </ul>
       <p>Total: {{ totalEntradas }}€</p>
-      <button class="buy-ticket-button" @click="goToTicketroom()" :disabled="selectedSeats.length === 0">Continuar compra</button>
+      <button class="buy-ticket-button" @click="goToTicketroom()" :disabled="selectedSeats.length === 0">Continuar
+        compra</button>
     </div>
   </div>
 </template>
@@ -54,38 +55,48 @@ export default {
         const response = await fetch(`http://localhost:8000/api/sesiones-entradas/${sessionId}`);
 
         const data = await response.json();
-        console.log(data);
+        console.log('Datos de butacas ocupadas recibidos:', data);
         this.initializeSeats(data.entradas); // Llama a la función para inicializar los asientos ocupados
       } catch (error) {
         console.error('Error al obtener butacas ocupadas:', error);
       }
     },
     initializeSeats(entradas) {
-  const rows = 10; // Número de filas
-  const seatsPerRow = 12; // Número de asientos por fila
-  for (let i = 1; i <= rows; i++) {
-    const row = [];
-    for (let j = 1; j <= seatsPerRow; j++) {
-      const id = `${i}-${j}`;
-      const occupied = entradas.some(entrada => entrada === id);
-      row.push({ id, occupied, selected: false });
-    }
-    this.seats.push(row);
-  }
-}
-,
+      const rows = 10; // Número de filas
+      const seatsPerRow = 12; // Número de asientos por fila
+      for (let i = 1; i <= rows; i++) {
+        const row = [];
+        for (let j = 1; j <= seatsPerRow; j++) {
+          const id = `${i}-${j}`;
+          const occupied = entradas.some(entrada => {
+            if (entrada.Butaca === id) { // Comparar con el formato completo de la butaca
+              console.log(`Asiento ${id} está ocupado`);
+              return true;
+            }
+            return false;
+          });
+          row.push({ id, occupied, selected: false });
+        }
+        this.seats.push(row);
+      }
+    },
     selectSeat(rowIndex, seatIndex) {
       const seat = this.seats[rowIndex][seatIndex];
       if (!seat.occupied) {
-        seat.selected = !seat.selected;
-        const index = this.selectedSeats.findIndex(selectedSeat => selectedSeat === seat.id);
-        if (index === -1) {
-          this.selectedSeats.push(seat.id);
+        if (this.selectedSeats.length < 10) { // Verificar si ya se han seleccionado 10 entradas
+          seat.selected = !seat.selected;
+          const index = this.selectedSeats.findIndex(selectedSeat => selectedSeat === seat.id);
+          if (index === -1) {
+            this.selectedSeats.push(seat.id);
+          } else {
+            this.selectedSeats.splice(index, 1);
+          }
         } else {
-          this.selectedSeats.splice(index, 1);
+          alert('Ya has seleccionado el máximo de 10 entradas.');
         }
       }
     },
+
     goToTicketroom() {
       this.$router.push({ path: `/ticket` });
       const peliculaStore = usePeliculaStore();
