@@ -61,18 +61,19 @@ export default {
       }
     },
     initializeSeats(entradas) {
-      const rows = 10; // Número de filas
-      const seatsPerRow = 12; // Número de asientos por fila
-      for (let i = 1; i <= rows; i++) {
-        const row = [];
-        for (let j = 1; j <= seatsPerRow; j++) {
-          const id = `${i}-${j}`;
-          const occupied = entradas.some(entrada => entrada.Fila === i && entrada.Asiento === j);
-          row.push({ id, occupied, selected: false });
-        }
-        this.seats.push(row);
-      }
-    },
+  const rows = 10; // Número de filas
+  const seatsPerRow = 12; // Número de asientos por fila
+  for (let i = 1; i <= rows; i++) {
+    const row = [];
+    for (let j = 1; j <= seatsPerRow; j++) {
+      const id = `${i}-${j}`;
+      const occupied = entradas.some(entrada => entrada === id);
+      row.push({ id, occupied, selected: false });
+    }
+    this.seats.push(row);
+  }
+}
+,
     selectSeat(rowIndex, seatIndex) {
       const seat = this.seats[rowIndex][seatIndex];
       if (!seat.occupied) {
