@@ -1,96 +1,115 @@
 <template>
   <div class="container">
-    <h1>Cine Estelar</h1>
-    
-    <!-- Carrusel de imágenes -->
-    <div class="swiper-container">
-      <swiper :options="swiperOptions">
-        <swiper-slide v-for="imagen in imagenesCarrusel" :key="imagen">
-          <img :src="imagen" alt="Imagen de película">
-        </swiper-slide>
-        <div class="swiper-pagination"></div>
-      </swiper>
-    </div>
-    
-    <!-- Películas de esta semana -->
     <section>
-      <h2>Película de esta Semana</h2>
-      <div v-for="pelicula in peliculasDestacadas" :key="pelicula.id">
-        <h3>{{ pelicula.titulo }}</h3>
-        <p>{{ pelicula.descripcion }}</p>
+
+      <div class="container">
+        <!-- Mostrar la película más reciente -->
+        <div v-if="peliculaMasReciente" class="movie-of-the-week upcoming-movies">
+          <img :src="peliculaMasReciente.pelicula.poster" :alt="peliculaMasReciente.pelicula.titulo"
+            class="movie-poster-large">
+          <div class="movie-details">
+            <h4>{{ peliculaMasReciente.pelicula.titulo }}</h4>
+            <c3>{{ peliculaMasReciente.pelicula.sinopsis }}</c3>
+            <p>Fecha de estreno: {{ formatFecha(peliculaMasReciente.fecha_hora) }}</p>
+            <nuxt-link :to="'/' + peliculaMasReciente.id" class="buy-ticket-button" @click="guardarPeliculaSeleccionada(peliculaMasReciente.id)">Reservar entrada</nuxt-link>
+          </div>
+        </div>
       </div>
-    </section>
-    
-    <!-- Próximamente -->
-    <section>
+
       <h2>Próximamente</h2>
-      <!-- Contenido similar al anterior con las películas próximas -->
+
+      <!-- Listado de películas -->
+      <div class="upcoming-movies">
+        <div v-for="(sesion, index) in sesiones" :key="sesion.id" class="movie" v-if="index !== 0">
+          <img :src="sesion.pelicula.poster" :alt="sesion.pelicula.titulo" class="movie-poster-small">
+          <h3>{{ sesion.pelicula.titulo }}</h3>
+          <p>Fecha de estreno: {{ formatFecha(sesion.fecha_hora) }}</p>
+          <nuxt-link :to="'/' + sesion.id" class="buy-ticket-button" @click="guardarPeliculaSeleccionada(sesion.id)">Reservar entrada</nuxt-link>
+        </div>
+      </div>
     </section>
   </div>
 </template>
 
 <script>
-// Importa Swiper y Swiper styles
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import SwiperCore, { Pagination, Navigation } from 'swiper/core';
-import 'swiper/swiper-bundle.css';
-
-// Instala los módulos de Swiper
-SwiperCore.use([Pagination, Navigation]);
+import { usePeliculaStore } from '~/stores/peliculaStore'
 
 export default {
-  components: {
-    Swiper,
-    SwiperSlide
-  },
   data() {
     return {
-      swiperOptions: {
-        loop: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        // Añade más opciones según necesites
-      },
-      imagenesCarrusel: [
-        '/path/to/image-1.jpg',
-        '/path/to/image-2.jpg',
-        // Más imágenes aquí
-      ],
-      peliculasDestacadas: [
-        { id: 1, titulo: "Pelicula A", descripcion: "Descripción de Pelicula A" },
-        // Solo una película si se emite una a la vez
-      ],
-      // Añadir otro array para próximamente si es necesario
-    };
+      sesiones: [],
+      peliculaMasReciente: null
+    }
   },
-};
+  created() {
+    this.fetchSesiones(); // Llamar al método fetchSesiones al cargar la página
+  },
+  methods: {
+    fetchSesiones() {
+      const peliculaStore = usePeliculaStore();
+
+      fetch('http://localhost:8000/api/sesiones')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Ordenar las sesiones por la fecha de estreno
+          this.sesiones = data.sort((a, b) => new Date(a.fecha_hora) - new Date(b.fecha_hora));
+
+          // Asignar la primera sesión como la película más reciente
+          this.peliculaMasReciente = this.sesiones.length > 0 ? this.sesiones[0] : null;
+
+          // Guardar la película más reciente en la tienda de películas
+          if (this.peliculaMasReciente) {
+            peliculaStore.actualizarPelicula(this.peliculaMasReciente.id, this.peliculaMasReciente.pelicula);
+          }
+
+          // Eliminar la primera sesión de la lista de sesiones
+          this.sesiones = this.sesiones.slice(1);
+
+          // Guardar información de todas las películas en la tienda de películas
+          this.sesiones.forEach(sesion => {
+            peliculaStore.actualizarPelicula(sesion.id, sesion.pelicula);
+          });
+        })
+        .catch(error => {
+          console.error('There has been a problem with your fetch operation:', error);
+        });
+    },
+    formatFecha(fecha) {
+      return new Date(fecha).toLocaleDateString();
+    },
+    guardarPeliculaSeleccionada(id) {
+      const peliculaStore = usePeliculaStore();
+      peliculaStore.setSesionID(id);
+      console.log('ID de la película seleccionada:', id);
+    }
+  }
+}
 </script>
 
 <style scoped>
 .container {
   background-color: #000;
   color: #fff;
+  padding-left: 10%;
+  /* Agregamos padding en lugar de margen izquierdo */
+  padding-right: 10%;
+  margin-top: 62px;
 }
 
-h1, h2, h3, p {
+h1,
+h2,
+h3,
+p {
   color: #fff;
 }
 
-.swiper-container {
-  width: 100%;
-  height: 400px;
-}
-
-.swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+h4 {
+  font-size: 150%;
 }
 
 section {
@@ -99,5 +118,96 @@ section {
 
 h2 {
   margin-bottom: 15px;
+}
+
+.movie-of-the-week {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.movie-of-the-week .movie-poster-large {
+  width: 100%;
+  /* Utiliza todo el ancho disponible */
+  height: auto;
+  max-width: 400px;
+  /* Limita el ancho máximo */
+  margin-right: 20px;
+  margin-top: 40px;
+}
+
+.movie-details {
+  flex: 1;
+}
+
+.upcoming-movies {
+  display: flex;
+  flex-wrap: wrap;
+  /* Permite que los elementos se envuelvan en una nueva línea */
+  gap: 20px;
+  /* Espacio entre las películas */
+}
+
+.movie {
+  width: calc(25% - 10px);
+  /* 25% del ancho del contenedor, menos el espacio entre las películas */
+  margin-bottom: 20px;
+  margin-right: 50px;
+}
+
+.movie h3 {
+  margin-top: 10px;
+}
+
+.movie-poster-small {
+  width: 100%;
+  /* Utiliza todo el ancho disponible */
+  height: auto;
+  max-width: 300px;
+  /* Limita el ancho máximo */
+}
+
+body {
+  margin: 0%;
+}
+
+.buy-ticket-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buy-ticket-button:hover {
+  background-color: #0056b3;
+}
+
+a:-webkit-any-link {
+
+  cursor: pointer;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 768px) {
+
+  /* Estilos específicos para pantallas con un ancho máximo de 768px (tamaño móvil) */
+  .container {
+    margin-top: 62px;
+    /* Cambia el margen superior para la versión móvil */
+  }
+
+  .upcoming-movies {
+    justify-content: center;
+    /* Centra las películas en pantallas pequeñas */
+  }
+
+  .movie {
+    width: calc(50% - 10px);
+    /* Muestra dos películas por fila en dispositivos pequeños */
+  }
 }
 </style>

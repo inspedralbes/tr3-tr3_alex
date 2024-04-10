@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('entradas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sesion_cine_id'); // Relación con la sesión de cine
-            $table->foreign('sesion_cine_id')->references('id')->on('sesiones_cine');
-            $table->integer('cantidad'); // Cantidad de entradas compradas en esta transacción
-            $table->decimal('precio', 8, 2); // Precio unitario de cada entrada
+            $table->foreign('sesion_cine_id')->references('id')->on('Sessions');
+            $table->string('Butaca'); // Fila+asiento
+            $table->string('Fila'); // Fila de la sala
+            $table->string('Asiento'); // Asiento de la sala
+            $table->unique(['sesion_cine_id', 'Butaca']); // Clave única para evitar entradas duplicadas         
             $table->timestamps(); // Fechas de creación y actualización del registro
         });        
     }

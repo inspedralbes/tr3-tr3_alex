@@ -1,23 +1,24 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Sessions;
 
-class Entrada extends Model
+class Entradas extends Model
 {
     use HasFactory;
 
     protected $table = 'entradas';
     protected $fillable = [
         'sesion_cine_id',
-        'cantidad',
-        'precio',
+        'Butaca',
+        'Fila',
+        'Asiento',
     ];
 
     public function sesion()
     {
-        return $this->belongsTo(Sesion::class, 'sesion_cine_id');
+        return $this->belongsTo(Sessions::class, 'sesion_cine_id');
     }
 }
