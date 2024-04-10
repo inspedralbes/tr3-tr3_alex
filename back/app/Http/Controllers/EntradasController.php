@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Entradas;
 use App\Models\Sessions;
+use App\Mail\enviarCorreo;
 
 class EntradasController extends Controller
 {
@@ -23,7 +24,8 @@ class EntradasController extends Controller
                 'sesion_cine_id' => $entrada['sesion_cine_id'],
                 'Butaca' => $entrada['Butaca'],
                 'Fila' => $entrada['Fila'],
-                'Asiento' => $entrada['Asiento']
+                'Asiento' => $entrada['Asiento'],
+                'email'=>$entrada['email']
             ]);
         }
 

@@ -15,6 +15,7 @@ class Entradas extends Model
         'Butaca',
         'Fila',
         'Asiento',
+        'email'
     ];
 
     public function sesion()
