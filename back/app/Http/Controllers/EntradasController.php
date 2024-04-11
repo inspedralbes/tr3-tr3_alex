@@ -33,7 +33,7 @@ class EntradasController extends Controller
 
             $butacasSeleccionadas[] =[
                 'butaca' => $nuevaEntrada -> Butaca,
-                // 'precio' => $nuevaEntrada -> precio
+                'precio' => $nuevaEntrada -> precio
             ];
             
         }
@@ -42,7 +42,7 @@ class EntradasController extends Controller
             'sesion_cine_id' => $nuevaEntrada->sesion_cine_id,
             'Butaca' => $butacasSeleccionadas,
             'email' => $nuevaEntrada->email,
-            // 'precioTotal' =>  array_sum(array_column($butacasSeleccionadas, 'precio'))
+            'precioTotal' =>  array_sum(array_column($butacasSeleccionadas, 'precio'))
         ];
 
 

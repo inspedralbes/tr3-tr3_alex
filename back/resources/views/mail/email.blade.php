@@ -9,15 +9,14 @@
     <h2>¡Gracias por tu compra!</h2>
     <p>Aquí están los detalles de tu entrada:</p>
     <ul>
-       
         
         @foreach ($data['Butaca'] as $butaca)
-            <li><strong>Butaca:</strong> {{ $butaca['butaca'] }} 
-        </li>
+            <li><strong>Butaca:</strong> {{ $butaca['butaca'] }} - <strong>Precio:</strong> {{ $butaca['precio'] }}€</li>
         @endforeach
-    
+        
+        <!-- <li><strong>Correo electrónico:</strong> {{ $data['email'] }}</li> -->
     </ul>
-    
+    <p>Total: {{$data.['precioTotal']}}€</p>
     <p>¡Disfruta de la película!</p>
 </body>
 </html>
