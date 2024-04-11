@@ -3,42 +3,48 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class enviarCorreo extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
-    {
-        
-    }
+    public $data;
 
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+/** 
+   * @return $this
+*/
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Entradas Cine Alex',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Entradas Cine Alex',
+    //     );
+    // }
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
+    // /**
+    //  * Get the message content definition.
+    //  */
+    // public function content(): Content
+    // {
+    //     return new Content([
+    //         'view' => 'mail.email',
+    //         'data' => $this->data, // Pasamos los datos a la vista
+    //     ]);
+    // }
+
+    public function build()
     {
-        return new Content(
-            view: 'mail.email',
-        );
+        return $this->subject('Entradas Cine Alex')
+                    ->view('mail.email')
+                    ->with(['data' => $this->data]);
     }
 
     /**

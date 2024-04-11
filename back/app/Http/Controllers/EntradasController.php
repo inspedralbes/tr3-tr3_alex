@@ -29,8 +29,25 @@ class EntradasController extends Controller
                 'email' => $entradasData['email'] // Acceder al correo electrónico desde $entradasData
             ]);
             // Luego de guardar cada entrada, envía el correo electrónico
-            Mail::to($entradasData['email'])->send(new enviarCorreo());
+
+            $butacasSeleccionadas[] =[
+                'butaca' => $nuevaEntrada -> Butaca,
+                // 'precio' => '10€'
+            ];
+            
         }
+
+        $datosCorreo = [
+            'sesion_cine_id' => $nuevaEntrada->sesion_cine_id,
+            'Butaca' => $butacasSeleccionadas,
+            'email' => $nuevaEntrada->email,
+            // 'precioTotal' =>  array_sum(array_column($butacasSeleccionadas, 'precio'))
+        ];
+
+
+
+        Mail::to($datosCorreo['email'])->send(new enviarCorreo($datosCorreo));
+
         return response()->json(['message' => 'Entradas guardadas correctamente'], 201);
     }
 
