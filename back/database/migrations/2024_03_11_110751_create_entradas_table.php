@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('Butaca'); // Fila+asiento
             $table->string('Fila'); // Fila de la sala
             $table->string('Asiento'); // Asiento de la sala
+            $table->string('email');
             $table->unique(['sesion_cine_id', 'Butaca']); // Clave única para evitar entradas duplicadas         
             $table->timestamps(); // Fechas de creación y actualización del registro
         });        

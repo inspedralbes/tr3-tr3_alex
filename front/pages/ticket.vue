@@ -14,18 +14,34 @@
         </li>
       </ul>
     </div>
-    <button class="buy-ticket-button" @click="finalizarCompra">Finalizar compra</button>
+
+    <div>
+      <label for="email" class="email-label"></label>
+      <input type="email" v-model="email" id="email" class="email-input" placeholder="Ingrese su correo electrónico">
+    </div>
+    <NuxtLink to="/">
+      <button
+        :class="{ 'buy-ticket-button': true, 'valid-email': validarEmail(email), 'invalid-email': !validarEmail(email) }"
+        @click="finalizarCompra" :disabled="!validarEmail(email)">Finalizar compra</button>
+    </NuxtLink>
   </div>
 </template>
-
 <script>
 import { usePeliculaStore } from '~/stores/peliculaStore';
 
 export default {
   data() {
     return {
-      movie: {}
+      movie: {},
+      email: ''
     };
+  },
+  computed: {
+    butacasOcupadas() {
+      const peliculaStore = usePeliculaStore();
+      return peliculaStore.butacasOcupadas;
+    },
+
   },
   created() {
     this.fetchMovieData();
@@ -42,7 +58,18 @@ export default {
         console.error('El sesionID no es un índice válido en el array de películas');
       }
     },
+    validarEmail(email) {
+      const re = /\S+@\S+\.\S+/;
+      return re.test(email);
+    },
     finalizarCompra() {
+      // Verificar si el campo de correo electrónico está vacío
+      if (!this.email) {
+        alert('Por favor, ingrese su correo electrónico.');
+        return; // Detener la función aquí si el campo de correo electrónico está vacío
+      }
+
+      // Continuar con el resto del código para finalizar la compra
       const peliculaStore = usePeliculaStore();
       const peliculaActual = this.movie;
 
@@ -53,6 +80,7 @@ export default {
 
       const dataToSend = {
         sesion_id: peliculaStore.sesionID,
+        email: this.email, // Agregar el correo electrónico aquí
         asientos: peliculaStore.butacasOcupadas.map((butaca, index) => {
           const fila = butaca.split('-')[0];
           const asiento = butaca.split('-')[1];
@@ -60,10 +88,10 @@ export default {
             sesion_cine_id: peliculaStore.sesionID,
             Butaca: peliculaStore.butacasOcupadas[index],
             Fila: fila,
-            Asiento: asiento
+            Asiento: asiento,
+            email: this.email
           };
         }),
-        
       };
 
       console.log(dataToSend);
@@ -143,10 +171,41 @@ ul {
 
 .buy-ticket-button {
   padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.valid-email {
+  background-color: rgba(0, 214, 170, .85);
+  /* Color de fondo que coincide con el borde del email */
+  color: white;
+  /* Color del texto */
+}
+
+.invalid-email {
+  background-color: red;
+  /* Color de fondo rojo para correo electrónico no válido */
+  color: white;
+}
+
+.buy-ticket-button:disabled {
+  background-color: grey;
+  /* Color de fondo gris para botón deshabilitado */
+  cursor: not-allowed;
+}
+
+.email-label {
+  color: rgba(0, 214, 170, .85);
+  /* Color del borde */
+}
+
+.email-input {
+  border: 3px solid rgba(0, 214, 170, .85);
+  /* Borde con color rgba */
+  border-radius: 5px;
+  /* Esquinas redondeadas */
+  padding: 5px 10px;
+  /* Espaciado dentro del campo */
 }
 </style>
