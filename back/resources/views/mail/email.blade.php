@@ -14,9 +14,9 @@
             <li><strong>Butaca:</strong> {{ $butaca['butaca'] }} - <strong>Precio:</strong> {{ $butaca['precio'] }}€</li>
         @endforeach
         
-        <!-- <li><strong>Correo electrónico:</strong> {{ $data['email'] }}</li> -->
+       
     </ul>
-    <p>Total: {{$data.['precioTotal']}}€</p>
+    <p><strong>Precio Total:</strong> {{ $data['precioTotal'] }}€</p>
     <p>¡Disfruta de la película!</p>
 </body>
 </html>
