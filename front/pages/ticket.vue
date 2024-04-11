@@ -10,8 +10,13 @@
       <h3>Butacas Seleccionadas:</h3>
       <ul>
         <li v-for="(butaca, index) in butacasOcupadas" :key="index">
-          Entrada {{ index + 1 }}: Fila {{ butaca.split('-')[0] }}, Asiento {{ butaca.split('-')[1] }}
+          Entrada {{ index + 1 }}: Fila {{ butaca.split('-')[0] }}, Asiento {{ butaca.split('-')[1] }}, Precio: {{ usePeliculaStore().precio }}€
         </li>
+        <!-- Mostrar el total debajo de la última entrada -->
+        <li v-if="butacasOcupadas.length > 0">
+          Total: {{ calcularTotal() }}€
+        </li>
+        <l1>a21aledelfel@inspedralbes.cat</l1>
       </ul>
     </div>
 
@@ -41,7 +46,6 @@ export default {
       const peliculaStore = usePeliculaStore();
       return peliculaStore.butacasOcupadas;
     },
-
   },
   created() {
     this.fetchMovieData();
@@ -63,13 +67,11 @@ export default {
       return re.test(email);
     },
     finalizarCompra() {
-      // Verificar si el campo de correo electrónico está vacío
       if (!this.email) {
         alert('Por favor, ingrese su correo electrónico.');
-        return; // Detener la función aquí si el campo de correo electrónico está vacío
+        return;
       }
 
-      // Continuar con el resto del código para finalizar la compra
       const peliculaStore = usePeliculaStore();
       const peliculaActual = this.movie;
 
@@ -78,20 +80,25 @@ export default {
         return;
       }
 
+      const precio = peliculaStore.precio;
+      const butacasOcupadas = peliculaStore.butacasOcupadas;
+
+      const asientos = butacasOcupadas.map(butaca => {
+        const fila = butaca.split('-')[0];
+        const asiento = butaca.split('-')[1];
+        return {
+          sesion_cine_id: peliculaStore.sesionID,
+          Butaca: butaca,
+          Fila: fila,
+          Asiento: asiento,
+          precio: precio,
+          email: this.email
+        };
+      });
+
       const dataToSend = {
-        sesion_id: peliculaStore.sesionID,
-        email: this.email, // Agregar el correo electrónico aquí
-        asientos: peliculaStore.butacasOcupadas.map((butaca, index) => {
-          const fila = butaca.split('-')[0];
-          const asiento = butaca.split('-')[1];
-          return {
-            sesion_cine_id: peliculaStore.sesionID,
-            Butaca: peliculaStore.butacasOcupadas[index],
-            Fila: fila,
-            Asiento: asiento,
-            email: this.email
-          };
-        }),
+        email: this.email,
+        asientos: asientos
       };
 
       console.log(dataToSend);
@@ -103,32 +110,30 @@ export default {
         },
         body: JSON.stringify(dataToSend)
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Error al finalizar la compra');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Entrada comprada exitosamente:', data);
-          setTimeout(() => {
-            // Realizar cualquier otra acción necesaria después de completar la compra
-          }, 2000);
-        })
-        .catch(error => {
-          console.error('Error al finalizar la compra:', error);
-        });
-    }
-
-
-
-  },
-  computed: {
-    butacasOcupadas() {
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al finalizar la compra');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Entrada comprada exitosamente:', data);
+        setTimeout(() => {
+          // Realizar cualquier otra acción necesaria después de completar la compra
+        }, 2000);
+      })
+      .catch(error => {
+        console.error('Error al finalizar la compra:', error);
+      });
+    },
+    calcularTotal() {
       const peliculaStore = usePeliculaStore();
-      return peliculaStore.butacasOcupadas;
+      const total = peliculaStore.butacasOcupadas.reduce((acc, butaca) => {
+        return acc + peliculaStore.precio;
+      }, 0);
+      return total;
     }
-  },
+  }
 };
 </script>
 
@@ -182,7 +187,9 @@ ul {
   color: white;
   /* Color del texto */
 }
-
+body {
+    font-family: Helvetica, Arial, sans-serif;
+  }
 .invalid-email {
   background-color: red;
   /* Color de fondo rojo para correo electrónico no válido */

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('Fila'); // Fila de la sala
             $table->string('Asiento'); // Asiento de la sala
             $table->string('email');
+            $table->decimal('precio', 8, 2); // Decimal con 8 dígitos en total y 2 decimales
             $table->unique(['sesion_cine_id', 'Butaca']); // Clave única para evitar entradas duplicadas         
             $table->timestamps(); // Fechas de creación y actualización del registro
         });        

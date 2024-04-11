@@ -208,6 +208,9 @@ body {
   color: #666;
   margin-bottom: 5px;
 }
+body {
+    font-family: Helvetica, Arial, sans-serif;
+  }
 
 @media (max-width: 768px) {
   .peliculas-grid {

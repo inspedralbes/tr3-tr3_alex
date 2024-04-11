@@ -4,15 +4,15 @@
     <div class="row" v-for="(row, rowIndex) in seats" :key="rowIndex">
       <div class="seat" v-for="(seat, seatIndex) in row" :key="seatIndex"
         :class="{ 'selected': seat.selected, 'occupied': seat.occupied }" :disabled="seat.occupied"
-        @click="selectSeat(rowIndex, seatIndex)">
+        @click="selectSeat(rowIndex, seatIndex, seat.id)">
         <span class="hidden">{{ seat.id }}</span>
       </div>
     </div>
     <div class="purchase-info">
       <h3>Butacas seleccionadas:</h3>
       <ul>
-        <li v-for="(seat, index) in selectedSeats" :key="index">
-          Butaca {{ seat.id }} - Precio: {{ precioButaca }}€
+        <li v-for="(seatId, index) in selectedSeats" :key="index">
+          Butaca {{ seatId }} - Precio: {{ precioButaca }}€
         </li>
       </ul>
       <p>Total: {{ totalEntradas }}€</p>
@@ -29,9 +29,9 @@ export default {
   data() {
     return {
       selectedSeats: [],
-      precioButaca: 10,
       session: null,
       seats: [],
+      precioButaca: 0,
     };
   },
   computed: {
@@ -45,7 +45,6 @@ export default {
   },
   mounted() {
     this.fetchButacasOcupadas();
-    // setInterval(this.fetchButacasOcupadas, 10000);
   },
   methods: {
     async fetchButacasOcupadas() {
@@ -53,50 +52,52 @@ export default {
         const peliculaStore = usePeliculaStore();
         const sessionId = peliculaStore.sesionID;
         const response = await fetch(`http://localhost:8000/api/sesiones-entradas/${sessionId}`);
-
         const data = await response.json();
-        console.log('Datos de butacas ocupadas recibidos:', data);
-        this.initializeSeats(data.entradas); // Llama a la función para inicializar los asientos ocupados
+        this.initializeSeats(data.entradas);
+        await this.fetchSessionData(sessionId);
       } catch (error) {
         console.error('Error al obtener butacas ocupadas:', error);
       }
     },
+    async fetchSessionData(sessionId) {
+  try {
+    const response = await fetch(`http://localhost:8000/api/sesiones/${sessionId}`);
+    const data2 = await response.json();
+    this.precioButaca = data2.precio;
+    const peliculaStore = usePeliculaStore();
+    peliculaStore.actualizarPrecio(data2.precio); // Aquí actualizamos el precio en el store
+  } catch (error) {
+    console.error('Error al obtener los datos de la sesión:', error);
+  }
+},
     initializeSeats(entradas) {
-      const rows = 10; // Número de filas
-      const seatsPerRow = 12; // Número de asientos por fila
+      const rows = 10;
+      const seatsPerRow = 12;
       for (let i = 1; i <= rows; i++) {
         const row = [];
         for (let j = 1; j <= seatsPerRow; j++) {
           const id = `${i}-${j}`;
-          const occupied = entradas.some(entrada => {
-            if (entrada.Butaca === id) { // Comparar con el formato completo de la butaca
-              console.log(`Asiento ${id} está ocupado`);
-              return true;
-            }
-            return false;
-          });
+          const occupied = entradas.some(entrada => entrada.Butaca === id);
           row.push({ id, occupied, selected: false });
         }
         this.seats.push(row);
       }
     },
-    selectSeat(rowIndex, seatIndex) {
+    selectSeat(rowIndex, seatIndex, seatId) {
       const seat = this.seats[rowIndex][seatIndex];
       if (!seat.occupied) {
-        if (this.selectedSeats.length < 10) { // Verificar si ya se han seleccionado 10 entradas
+        if (this.selectedSeats.length < 10) {
           seat.selected = !seat.selected;
-          const index = this.selectedSeats.findIndex(selectedSeat => selectedSeat === seat.id);
-          if (index === -1) {
-            this.selectedSeats.push(seat.id);
+          if (!this.selectedSeats.includes(seatId)) {
+            this.selectedSeats.push(seatId);
           } else {
-            this.selectedSeats.splice(index, 1);
+            this.selectedSeats = this.selectedSeats.filter(id => id !== seatId);
           }
         } else {
           alert('Ya has seleccionado el máximo de 10 entradas.');
         }
       }
     },
-
     goToTicketroom() {
       this.$router.push({ path: `/ticket` });
       const peliculaStore = usePeliculaStore();
@@ -105,6 +106,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .cinema-container {

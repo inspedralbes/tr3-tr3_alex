@@ -26,13 +26,14 @@ class EntradasController extends Controller
                 'Butaca' => $entrada['Butaca'],
                 'Fila' => $entrada['Fila'],
                 'Asiento' => $entrada['Asiento'],
+                'precio' => $entrada['precio'],
                 'email' => $entradasData['email'] // Acceder al correo electrónico desde $entradasData
             ]);
             // Luego de guardar cada entrada, envía el correo electrónico
 
             $butacasSeleccionadas[] =[
                 'butaca' => $nuevaEntrada -> Butaca,
-                // 'precio' => '10€'
+                // 'precio' => $nuevaEntrada -> precio
             ];
             
         }

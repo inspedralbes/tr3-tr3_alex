@@ -12,7 +12,8 @@
        
         
         @foreach ($data['Butaca'] as $butaca)
-            <li><strong>Butaca:</strong> {{ $butaca['butaca'] }} </li>
+            <li><strong>Butaca:</strong> {{ $butaca['butaca'] }} 
+        </li>
         @endforeach
     
     </ul>

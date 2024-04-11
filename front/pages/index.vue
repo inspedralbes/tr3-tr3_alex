@@ -192,6 +192,10 @@ a:-webkit-any-link {
   text-decoration: none;
 }
 
+body {
+    font-family: Helvetica, Arial, sans-serif;
+  }
+
 @media screen and (max-width: 768px) {
 
   /* Estilos específicos para pantallas con un ancho máximo de 768px (tamaño móvil) */
