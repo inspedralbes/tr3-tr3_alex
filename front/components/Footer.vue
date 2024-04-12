@@ -13,10 +13,10 @@
             <nuxt-link to="/" class="footer-link">Inicio</nuxt-link>
           </li>
           <br>
-          <li>
+          <!-- <li>
             <nuxt-link to="/sesioActual" class="footer-link">Sesio Actual</nuxt-link>
           </li>
-          <br>
+          <br> -->
           <li>
             <nuxt-link to="/peliculas" class="footer-link">Peliculas</nuxt-link>
           </li>

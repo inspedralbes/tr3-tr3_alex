@@ -9,9 +9,9 @@
           <li>
             <NuxtLink to="/">Inicio</NuxtLink>
           </li>
-          <li>
+          <!-- <li>
             <NuxtLink to="/sesioActual">Sesio Actual</NuxtLink>
-          </li>
+          </li> -->
           <li>
             <NuxtLink to="/peliculas">Peliculas</NuxtLink>
           </li>

@@ -31,6 +31,7 @@
   </div>
 </template>
 
+
 <script>
 import { usePeliculaStore } from '~/stores/peliculaStore'
 
@@ -91,12 +92,12 @@ export default {
 }
 </script>
 
+
 <style scoped>
 .container {
   background-color: #000;
   color: #fff;
   padding-left: 10%;
-  /* Agregamos padding en lugar de margen izquierdo */
   padding-right: 10%;
   margin-top: 62px;
 }
@@ -129,10 +130,8 @@ h2 {
 
 .movie-of-the-week .movie-poster-large {
   width: 100%;
-  /* Utiliza todo el ancho disponible */
   height: auto;
   max-width: 400px;
-  /* Limita el ancho máximo */
   margin-right: 20px;
   margin-top: 40px;
 }
@@ -144,14 +143,11 @@ h2 {
 .upcoming-movies {
   display: flex;
   flex-wrap: wrap;
-  /* Permite que los elementos se envuelvan en una nueva línea */
   gap: 20px;
-  /* Espacio entre las películas */
 }
 
 .movie {
   width: calc(25% - 10px);
-  /* 25% del ancho del contenedor, menos el espacio entre las películas */
   margin-bottom: 20px;
   margin-right: 50px;
 }
@@ -162,20 +158,14 @@ h2 {
 
 .movie-poster-small {
   width: 100%;
-  /* Utiliza todo el ancho disponible */
   height: auto;
   max-width: 300px;
-  /* Limita el ancho máximo */
-}
-
-body {
-  margin: 0%;
 }
 
 .buy-ticket-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: rgba(0, 214, 170, .85); /* Cambia el color del botón */
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -187,31 +177,30 @@ body {
 }
 
 a:-webkit-any-link {
-
   cursor: pointer;
   text-decoration: none;
 }
 
 body {
-    font-family: Helvetica, Arial, sans-serif;
-  }
-
+  font-family: Helvetica, Arial, sans-serif;
+}
 @media screen and (max-width: 768px) {
-
-  /* Estilos específicos para pantallas con un ancho máximo de 768px (tamaño móvil) */
   .container {
     margin-top: 62px;
-    /* Cambia el margen superior para la versión móvil */
   }
 
   .upcoming-movies {
     justify-content: center;
-    /* Centra las películas en pantallas pequeñas */
   }
 
   .movie {
     width: calc(50% - 10px);
-    /* Muestra dos películas por fila en dispositivos pequeños */
+  }
+
+  .buy-ticket-button {
+    /* Ajusta el tamaño del botón en dispositivos móviles */
+    padding: 8px 16px;
+    font-size: 14px;
   }
 }
 </style>

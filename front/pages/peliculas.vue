@@ -212,10 +212,47 @@ body {
     font-family: Helvetica, Arial, sans-serif;
   }
 
-@media (max-width: 768px) {
-  .peliculas-grid {
-    grid-template-columns: repeat(1, 1fr);
-    /* Cambia a 2 columnas en dispositivos más pequeños */
+  @media (max-width: 768px) {
+    .pelicula-ampliada {
+    position: fixed;
+    top: 0;
+    left: 10px; /* Ajustar la posición izquierda para que se alinee con el borde izquierdo */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: flex-start; /* Alinear el contenido hacia la izquierda */
+    align-items: center;
+  }
+
+  .pelicula-ampliada-contenido {
+    max-width: 30%; /* Reducir el ancho máximo */
+    max-height: 90%; /* Reducir la altura máxima */
+  }
+
+  .pelicula-cartel-ampliada {
+    width: 200px; /* Reducir el ancho del cartel */
+  }
+
+  .pelicula-ampliada-info {
+    flex-direction: column; /* Mostrar la información en una columna */
+    align-items: center; /* Centrar el contenido */
+    text-align: center; /* Alinear el texto al centro */
+  }
+
+  .cerrar-ampliada {
+    align-self: flex-start; /* Alinear el botón de cerrar a la izquierda */
+    margin-bottom: 10px;
+    margin-top: 10px; /* Añadir margen superior */
+}
+
+  .pelicula-titulo {
+    margin-top: 10px; /* Añadir margen superior */
+  }
+
+  .pelicula-sinopsis {
+    margin-top: 10px; /* Añadir margen superior */
   }
 }
 </style>
