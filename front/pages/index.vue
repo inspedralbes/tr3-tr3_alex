@@ -49,7 +49,7 @@ export default {
     fetchSesiones() {
       const peliculaStore = usePeliculaStore();
 
-      fetch('http://tr3alex.daw.inspedralbes.cat/back/api/sesiones')
+      fetch('http://procinealex.daw.inspedralbes.cat/back/public/api/sesiones')
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');

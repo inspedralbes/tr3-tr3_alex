@@ -53,14 +53,9 @@ export default {
   methods: {
     fetchMovieData() {
       const peliculaStore = usePeliculaStore();
-      const sesionID = peliculaStore.sesionID;
+      
       const peliculas = peliculaStore.peliculas;
-
-      if (sesionID !== null && sesionID >= 0 && sesionID < peliculas.length) {
-        this.movie = peliculas[sesionID];
-      } else {
-        console.error('El sesionID no es un índice válido en el array de películas');
-      }
+     
     },
     validarEmail(email) {
       const re = /\S+@\S+\.\S+/;
@@ -103,7 +98,7 @@ export default {
 
       console.log(dataToSend);
 
-      fetch('http://tr3alex.daw.inspedralbes.cat/back/api/entradas', {
+      fetch('http://procinealex.daw.inspedralbes.cat/back/public/api/entradas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -51,7 +51,7 @@ export default {
       try {
         const peliculaStore = usePeliculaStore();
         const sessionId = peliculaStore.sesionID;
-        const response = await fetch(`http://tr3alex.daw.inspedralbes.cat/back/api/${sessionId}`);
+        const response = await fetch(`http://procinealex.daw.inspedralbes.cat/back/public/api/sesiones-entradas/${sessionId}`);
         const data = await response.json();
         this.initializeSeats(data.entradas);
         await this.fetchSessionData(sessionId);
@@ -61,9 +61,9 @@ export default {
     },
     async fetchSessionData(sessionId) {
   try {
-    const response = await fetch(`http://tr3alex.daw.inspedralbes.cat/back/api/${sessionId}`);
+    const response = await fetch(`http://procinealex.daw.inspedralbes.cat/back/public/api/sesiones/${sessionId}`);
     const data2 = await response.json();
-    this.precioButaca = data2.precio;
+    this.precioButaca = data2.precio; 
     const peliculaStore = usePeliculaStore();
     peliculaStore.actualizarPrecio(data2.precio); // Aquí actualizamos el precio en el store
   } catch (error) {

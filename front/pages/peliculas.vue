@@ -46,7 +46,7 @@ export default {
   methods: {
     async fetchPeliculas() {
       try {
-        const response = await fetch('http://tr3alex.daw.inspedralbes.cat/back/api/peliculas');
+        const response = await fetch('http://procinealex.daw.inspedralbes.cat/back/public/api/peliculas');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

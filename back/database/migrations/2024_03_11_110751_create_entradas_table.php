@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('entradas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sesion_cine_id'); // Relación con la sesión de cine
-            $table->foreign('sesion_cine_id')->references('id')->on('Sessions');
+            $table->foreign('sesion_cine_id')->references('id')->on('sessions');
             $table->string('Butaca'); // Fila+asiento
             $table->string('Fila'); // Fila de la sala
             $table->string('Asiento'); // Asiento de la sala
