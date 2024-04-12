@@ -2,7 +2,7 @@
   <body>
     <div style="margin-top: 62px;">
       <h1>Acerca de Nosotros</h1>
-      <p>Esta es una página básica en Nuxt para mostrar información sobre nosotros.</p>
+      <p>Cualquier duda contacta con a21aledelfel@inspedralbes.cat</p>
     </div>
     </body>
   </template>

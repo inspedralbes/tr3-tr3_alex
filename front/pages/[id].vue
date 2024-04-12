@@ -124,7 +124,7 @@ export default {
 .buy-ticket-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: rgba(0, 214, 170, .85); /* Cambia el color del botón */
   color: #fff;
   border: none;
   border-radius: 5px;
