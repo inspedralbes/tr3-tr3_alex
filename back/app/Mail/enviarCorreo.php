@@ -19,26 +19,7 @@ class enviarCorreo extends Mailable
 /** 
    * @return $this
 */
-    /**
-     * Get the message envelope.
-     */
-    // public function envelope(): Envelope
-    // {
-    //     return new Envelope(
-    //         subject: 'Entradas Cine Alex',
-    //     );
-    // }
-
-    // /**
-    //  * Get the message content definition.
-    //  */
-    // public function content(): Content
-    // {
-    //     return new Content([
-    //         'view' => 'mail.email',
-    //         'data' => $this->data, // Pasamos los datos a la vista
-    //     ]);
-    // }
+  
 
     public function build()
     {

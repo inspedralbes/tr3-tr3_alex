@@ -75,4 +75,8 @@ export default {
 .movie-card:hover {
   transform: scale(1.05);
 }
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+  }
 </style>

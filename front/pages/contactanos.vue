@@ -18,5 +18,8 @@
   </script>
   
   <style>
-  /* Añade estilos específicos de esta página aquí */
+  
+  body {
+    font-family: Helvetica, Arial, sans-serif;
+  }
   </style>
