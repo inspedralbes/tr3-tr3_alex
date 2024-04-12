@@ -103,7 +103,7 @@ export default {
 
       console.log(dataToSend);
 
-      fetch('http://localhost:8000/api/entradas', {
+      fetch('http://tr3alex.daw.inspedralbes.cat/back/api/entradas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

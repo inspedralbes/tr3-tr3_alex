@@ -51,7 +51,7 @@ export default {
       try {
         const peliculaStore = usePeliculaStore();
         const sessionId = peliculaStore.sesionID;
-        const response = await fetch(`http://localhost:8000/api/sesiones-entradas/${sessionId}`);
+        const response = await fetch(`http://tr3alex.daw.inspedralbes.cat/back/api/${sessionId}`);
         const data = await response.json();
         this.initializeSeats(data.entradas);
         await this.fetchSessionData(sessionId);
@@ -61,7 +61,7 @@ export default {
     },
     async fetchSessionData(sessionId) {
   try {
-    const response = await fetch(`http://localhost:8000/api/sesiones/${sessionId}`);
+    const response = await fetch(`http://tr3alex.daw.inspedralbes.cat/back/api/${sessionId}`);
     const data2 = await response.json();
     this.precioButaca = data2.precio;
     const peliculaStore = usePeliculaStore();

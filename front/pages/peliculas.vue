@@ -46,7 +46,7 @@ export default {
   methods: {
     async fetchPeliculas() {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/peliculas');
+        const response = await fetch('http://tr3alex.daw.inspedralbes.cat/back/api/peliculas');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
